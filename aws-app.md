@@ -132,8 +132,8 @@ A modern, mobile-first Progressive Web App for load testing with AWS serverless 
 
 ```bash
 # 1. Create Vite project
-npm create vite@latest load-testing-app -- --template react-ts
-cd load-testing-app
+npm create vite@latest kochess -- --template react-ts
+cd kochess
 
 # 2. Install dependencies
 npm install @tanstack/react-router @tanstack/react-query
@@ -156,7 +156,7 @@ cdk deploy
 ## 📁 Project Structure
 
 ```
-load-testing-app/
+kochess/
 ├── src/
 │   ├── components/          # React components
 │   │   ├── ui/            # Shadcn/UI components

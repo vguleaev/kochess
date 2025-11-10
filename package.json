@@ -1,0 +1,17 @@
+{
+  "name": "kochess",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "deploy:infra": "cd infrastructure && cdk deploy",
+    "deploy:frontend": "cd frontend && pnpm run build && cd ../infrastructure && cdk deploy",
+    "dev:frontend": "cd frontend && pnpm run dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/node": "^20.10.0"
+  }
+}
