@@ -25,4 +25,4 @@ AI-powered recommendations will suggest recipes based on user preferences and pr
 
 Deployed on **AWS**.
 
-Infrastructure done with **SST**.
+Infrastructure done with **AWS CDK**.
