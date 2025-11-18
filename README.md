@@ -8,21 +8,25 @@ AI-powered recommendations will suggest recipes based on user preferences and pr
 
 ## TechStack:
 
+Project is a **monorepo**.
+
 - React
 - Vite
+- PWA
 - shadcn
 - Tailwind
 - Typescript
-- Hono
-- Bun
-- Drizzle
-- Kinde auth
+- Serverless Functions (Lambda)
+- API Gateway
+- DynamoDb
+- S3
+- Open AI API
+- Clerk auth
 - Tanstack Router
-- Tanstack Forms
 - Tanstack Query
 - Zustand
 - lucide-icons
 
-Deployed on **AWS**.
+Project is deployed on **AWS**.
 
 Infrastructure done with **AWS CDK**.
