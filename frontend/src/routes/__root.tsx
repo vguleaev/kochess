@@ -1,5 +1,6 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { InstallPrompt } from '@/components/InstallPrompt';
 import '../index.css';
 
 const RootLayout = () => (
@@ -14,6 +15,7 @@ const RootLayout = () => (
     </div>
     <hr />
     <Outlet />
+    <InstallPrompt />
     <TanStackRouterDevtools />
   </>
 );
