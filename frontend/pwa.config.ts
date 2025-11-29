@@ -16,7 +16,7 @@ export const pwaConfig: Partial<VitePWAOptions> = {
     display: 'standalone',
     icons: [
       {
-        src: 'vite.svg',
+        src: 'gloves-logo-background.svg',
         sizes: 'any',
         type: 'image/svg+xml',
       },
