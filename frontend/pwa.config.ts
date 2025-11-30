@@ -2,7 +2,6 @@ import type { VitePWAOptions } from 'vite-plugin-pwa';
 
 export const pwaConfig: Partial<VitePWAOptions> = {
   registerType: 'autoUpdate',
-  includeAssets: ['favicon.ico', 'vite.svg'],
   devOptions: {
     enabled: true,
     type: 'module',
@@ -15,11 +14,8 @@ export const pwaConfig: Partial<VitePWAOptions> = {
     background_color: '#ffffff',
     display: 'standalone',
     icons: [
-      {
-        src: 'gloves-logo-background.svg',
-        sizes: 'any',
-        type: 'image/svg+xml',
-      },
+      { purpose: 'maskable', sizes: '512x512', src: 'icon512_maskable.png', type: 'image/png' },
+      { purpose: 'any', sizes: '512x512', src: 'icon512_rounded.png', type: 'image/png' },
     ],
   },
   workbox: {
