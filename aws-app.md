@@ -106,19 +106,70 @@ A modern, mobile-first Progressive Web App for load testing with AWS serverless 
 └─────────────────┘
 ```
 
-## 💰 AWS Free Tier Usage
+## 💰 AWS Free Tier Usage (Frankfurt Region - eu-central-1)
 
-| Service            | Free Tier Limit              | Your Usage             |
-| ------------------ | ---------------------------- | ---------------------- |
-| **S3**             | 5GB storage, 20k requests    | ✅ Static hosting      |
-| **CloudFront**     | 1TB transfer, 10M requests   | ✅ CDN distribution    |
-| **Lambda**         | 1M requests, 400k GB-seconds | ✅ API functions       |
-| **DynamoDB**       | 25GB storage, 25 RCU/WCU     | ✅ Test results        |
-| **API Gateway**    | 1M requests (12 months)      | ✅ REST endpoints      |
-| **Cognito**        | 50k MAUs                     | ✅ User authentication |
-| **Step Functions** | 4k state transitions         | ✅ Long-running tests  |
+All services listed below are **available in Frankfurt region** and eligible for free tier benefits.
 
-**Estimated Monthly Cost: $0-5** (well within free tier)
+| Service            | Free Tier Limit              | Duration       | Your Usage             |
+| ------------------ | ---------------------------- | -------------- | ---------------------- |
+| **S3**             | 5GB storage, 20k GET, 2k PUT | ✅ Always Free | ✅ Static hosting      |
+| **CloudFront**     | 50GB transfer, 2M requests   | ✅ Always Free | ✅ CDN distribution    |
+| **Lambda**         | 1M requests, 400k GB-seconds | ✅ Always Free | ✅ API functions       |
+| **DynamoDB**       | 25GB storage, 25 RCU/WCU     | ✅ Always Free | ✅ Test results        |
+| **API Gateway**    | 1M requests per month        | ⚠️ 12 Months   | ✅ REST endpoints      |
+| **Cognito**        | 50k MAUs                     | ✅ Always Free | ✅ User authentication |
+| **Step Functions** | 4k state transitions         | ✅ Always Free | ✅ Long-running tests  |
+
+### Free Tier Analysis
+
+**✅ Always Free Services (6/7):**
+
+- S3, CloudFront, Lambda, DynamoDB, Cognito, Step Functions
+- These services remain free indefinitely within the specified limits
+
+**⚠️ 12-Month Free Tier (1/7):**
+
+- **API Gateway**: Free for first 12 months only
+- After 12 months: ~$3.50 per million requests (still very affordable)
+
+**Estimated Monthly Cost:**
+
+- **First 12 months**: $0 (fully covered by free tier)
+- **After 12 months**: $0-3.50/month (only if exceeding API Gateway free tier)
+
+**Note**: CloudFront free tier is **50GB transfer** (not 1TB as previously stated). This is sufficient for most small-to-medium applications, but monitor usage if you expect high traffic.
+
+## 🌍 Frankfurt Region (eu-central-1) Compatibility
+
+**✅ All services are fully available in Frankfurt region:**
+
+- ✅ **S3** - Available in eu-central-1
+- ✅ **CloudFront** - Global service, works with Frankfurt origin
+- ✅ **Lambda** - Available in eu-central-1
+- ✅ **DynamoDB** - Available in eu-central-1
+- ✅ **API Gateway** - Available in eu-central-1
+- ✅ **Cognito** - Available in eu-central-1
+- ✅ **Step Functions** - Available in eu-central-1
+
+**Regional Considerations:**
+
+- All free tier benefits apply in Frankfurt region
+- Data residency: Data stays within EU (GDPR compliant)
+- Latency: Lower latency for EU users
+- Pricing: Same free tier limits apply globally (except China regions)
+
+**CDK Configuration for Frankfurt:**
+
+```typescript
+// Set region in CDK app
+const app = new cdk.App();
+new LoadTestingStack(app, 'LoadTestingStack', {
+  env: {
+    region: 'eu-central-1', // Frankfurt
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+  },
+});
+```
 
 ## 🛠️ Development Setup
 
