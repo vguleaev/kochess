@@ -3,6 +3,9 @@ node_modules/
 .pnp
 .pnp.js
 
+# Cursor rules
+.cursor/rules/
+
 # pnpm
 .pnpm-store/
 .pnpm-debug.log*

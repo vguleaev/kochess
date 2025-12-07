@@ -8,7 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "cdk:deploy-frontend": "pnpm build && pnpm cdk deploy KochessFrontendStack --profile kochess",
+    "cdk:diff-frontend": "pnpm build && pnpm cdk diff KochessFrontendStack --profile kochess"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
