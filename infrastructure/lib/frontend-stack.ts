@@ -4,6 +4,8 @@ import { Construct } from 'constructs';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
+import { Config } from './config';
 
 export class FrontendStack extends cdk.Stack {
   public readonly websiteBucket: s3.Bucket;
@@ -23,6 +25,11 @@ export class FrontendStack extends cdk.Stack {
       originAccessLevels: [cloudfront.AccessLevel.READ],
     });
 
+    const certificateArn = Config.get('CERTIFICATE_ARN');
+    const domainName = Config.get('DOMAIN_NAME');
+
+    const certificate = certificatemanager.Certificate.fromCertificateArn(this, 'Certificate', certificateArn);
+
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       defaultBehavior: {
         origin: origin,
@@ -30,6 +37,8 @@ export class FrontendStack extends cdk.Stack {
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
       },
+      certificate: certificate,
+      domainNames: [domainName],
       errorResponses: [
         {
           httpStatus: 404,
@@ -54,6 +63,11 @@ export class FrontendStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'BucketName', {
       value: this.websiteBucket.bucketName,
       description: 'S3 Bucket Name',
+    });
+
+    new cdk.CfnOutput(this, 'CustomDomainUrl', {
+      value: `https://${domainName}`,
+      description: 'Domain URL',
     });
   }
 }

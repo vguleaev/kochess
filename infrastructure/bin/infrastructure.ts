@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 import * as cdk from 'aws-cdk-lib/core';
 import { FrontendStack } from '../lib/frontend-stack';
 
-process.env.AWS_PROFILE = 'kochess';
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = new cdk.App();
 
