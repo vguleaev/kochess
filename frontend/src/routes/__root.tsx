@@ -2,6 +2,7 @@ import { createRootRouteWithContext, Link, Outlet } from '@tanstack/react-router
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { InstallPrompt } from '@/components/InstallPrompt';
+import { Button } from '@/components/ui/button';
 import type { RouterContext } from '@/lib/router';
 import '../index.css';
 
@@ -25,14 +26,12 @@ const RootLayout = () => {
         </div>
         <div className="flex items-center gap-4">
           <SignedOut>
-            <Link to="/sign-in" className="text-foreground hover:text-primary transition-colors">
-              Sign In
-            </Link>
-            <Link
-              to="/sign-up"
-              className="bg-primary text-primary-foreground px-4 py-2 rounded-[var(--radius)] hover:opacity-90 transition-opacity">
-              Sign Up
-            </Link>
+            <Button variant="ghost" asChild>
+              <Link to="/sign-in">Sign In</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/sign-up">Sign Up</Link>
+            </Button>
           </SignedOut>
           <SignedIn>
             <UserButton
