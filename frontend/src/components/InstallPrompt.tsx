@@ -6,7 +6,7 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-const DISMISSED_KEY = 'pwa-install-dismissed';
+const DISMISSED_KEY = 'kochess-pwa-install-dismissed';
 
 const getInitialDismissed = () => {
   if (typeof window === 'undefined') return false;

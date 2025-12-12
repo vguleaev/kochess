@@ -1,3 +1,25 @@
+import { ruRU } from '@clerk/localizations';
+
+export const clerkLocalization = {
+  ...ruRU,
+  signIn: {
+    ...ruRU.signIn,
+    start: {
+      ...ruRU.signIn?.start,
+      title: 'Добро пожаловать',
+      subtitle: 'Войдите, чтобы продолжить',
+    },
+  },
+  signUp: {
+    ...ruRU.signUp,
+    start: {
+      ...ruRU.signUp?.start,
+      title: 'Создать аккаунт',
+      subtitle: 'Зарегистрируйтесь, чтобы начать',
+    },
+  },
+};
+
 export const clerkAppearance = {
   variables: {
     colorPrimary: 'oklch(0.795 0.184 86.047)',
