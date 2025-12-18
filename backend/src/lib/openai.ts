@@ -40,7 +40,7 @@ export const createOpenAIClient = (): OpenAIClient => {
         }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as { choices: { message: { content: string } }[] };
       const calories = parseFloat(data.choices[0]?.message?.content || '0');
       return isNaN(calories) ? 0 : calories;
     },
@@ -74,7 +74,7 @@ export const createOpenAIClient = (): OpenAIClient => {
         }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as { choices: { message: { content: string } }[] };
       const content = data.choices[0]?.message?.content || '{}';
       return JSON.parse(content);
     },
