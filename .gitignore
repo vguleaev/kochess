@@ -88,3 +88,4 @@ samconfig.toml
 *.pem
 *.key
 *.cert
+notes.txt

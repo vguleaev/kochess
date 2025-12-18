@@ -10,7 +10,9 @@
     "test": "jest",
     "cdk": "cdk",
     "cdk:deploy-frontend": "pnpm build && pnpm cdk deploy KochessFrontendStack --profile kochess",
-    "cdk:diff-frontend": "pnpm build && pnpm cdk diff KochessFrontendStack --profile kochess"
+    "cdk:diff-frontend": "pnpm build && pnpm cdk diff KochessFrontendStack --profile kochess",
+    "cdk:deploy-backend": "pnpm build && pnpm cdk deploy KochessBackendStack --profile kochess",
+    "cdk:diff-backend": "pnpm build && pnpm cdk diff KochessBackendStack --profile kochess"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
