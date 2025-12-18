@@ -8,7 +8,7 @@ The application leverages modern web technologies to provide a seamless user exp
 
 ## Features
 
-- **User Authentication**: Secure login and registration using Kinde auth.
+- **User Authentication**: Secure login and registration using Clerk auth.
 - **PWA Support**: Progressive Web App capabilities for offline access and app-like experience.
 - **Recipe Management**: User can create, edit, and delete their recipes. Automatically calculate and display the calorie content of recipes.
 - **Onboarding journey**: During registration users select age, height, weight, sex, and activity level to calculate their daily calorie intake.
