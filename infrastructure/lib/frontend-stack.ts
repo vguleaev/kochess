@@ -20,6 +20,7 @@ export class FrontendStack extends cdk.Stack {
       autoDeleteObjects: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
     });
+    cdk.Tags.of(this.websiteBucket).add('Name', 'kochess-website-bucket');
 
     const origin = origins.S3BucketOrigin.withOriginAccessControl(this.websiteBucket, {
       originAccessLevels: [cloudfront.AccessLevel.READ],
@@ -53,6 +54,7 @@ export class FrontendStack extends cdk.Stack {
         },
       ],
     });
+    cdk.Tags.of(distribution).add('Name', 'kochess-distribution');
 
     new s3deploy.BucketDeployment(this, 'DeployFrontend', {
       sources: [s3deploy.Source.asset('../frontend/dist')],
