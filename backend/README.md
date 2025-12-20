@@ -25,6 +25,7 @@ backend/
 ## Lambda Handlers
 
 ### Recipes
+
 - `create.ts` - Create a new recipe
 - `get.ts` - Get a recipe by ID
 - `list.ts` - List all recipes for a user
@@ -32,14 +33,17 @@ backend/
 - `delete.ts` - Delete a recipe
 
 ### AI Features
+
 - `extract-calories.ts` - Extract calorie content from ingredients (async)
 - `generate-recipe.ts` - Generate a recipe from ingredients
 
 ### Users
+
 - `profile.ts` - Get/update user profile
 - `onboarding.ts` - Complete user onboarding with calorie calculation
 
 ### Health
+
 - `health.ts` - Health check endpoint
 
 ## Environment Variables
@@ -49,7 +53,7 @@ The following environment variables need to be set in your Lambda functions:
 - `RECIPES_TABLE_NAME` - DynamoDB table name for recipes
 - `USER_PROFILES_TABLE_NAME` - DynamoDB table name for user profiles
 - `OPENAI_API_KEY` - OpenAI API key for AI features
-- `AWS_REGION` - AWS region (defaults to us-east-1)
+- `AWS_REGION` - AWS region (defaults to eu-central-1)
 
 ## Building
 
@@ -92,4 +96,3 @@ const createRecipeLambda = new lambda.Function(this, 'CreateRecipeFunction', {
   },
 });
 ```
-

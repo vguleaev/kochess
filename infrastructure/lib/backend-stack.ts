@@ -10,6 +10,9 @@ export class BackendStack extends cdk.Stack {
   public readonly recipesTable: dynamodb.Table;
   public readonly listRecipesLambda: lambda.NodejsFunction;
   public readonly createRecipeLambda: lambda.NodejsFunction;
+  public readonly getRecipeLambda: lambda.NodejsFunction;
+  public readonly updateRecipeLambda: lambda.NodejsFunction;
+  public readonly deleteRecipeLambda: lambda.NodejsFunction;
   public readonly api: apigateway.RestApi;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -59,8 +62,32 @@ export class BackendStack extends cdk.Stack {
     });
     cdk.Tags.of(this.createRecipeLambda).add('Name', 'kochess-create-recipe');
 
+    this.getRecipeLambda = new lambda.NodejsFunction(this, 'GetRecipeLambda', {
+      ...lambdaProps,
+      entry: path.join(__dirname, '../../backend/src/handlers/recipes/get.ts'),
+      handler: 'handler',
+    });
+    cdk.Tags.of(this.getRecipeLambda).add('Name', 'kochess-get-recipe');
+
+    this.updateRecipeLambda = new lambda.NodejsFunction(this, 'UpdateRecipeLambda', {
+      ...lambdaProps,
+      entry: path.join(__dirname, '../../backend/src/handlers/recipes/update.ts'),
+      handler: 'handler',
+    });
+    cdk.Tags.of(this.updateRecipeLambda).add('Name', 'kochess-update-recipe');
+
+    this.deleteRecipeLambda = new lambda.NodejsFunction(this, 'DeleteRecipeLambda', {
+      ...lambdaProps,
+      entry: path.join(__dirname, '../../backend/src/handlers/recipes/delete.ts'),
+      handler: 'handler',
+    });
+    cdk.Tags.of(this.deleteRecipeLambda).add('Name', 'kochess-delete-recipe');
+
     this.recipesTable.grantReadData(this.listRecipesLambda);
     this.recipesTable.grantReadWriteData(this.createRecipeLambda);
+    this.recipesTable.grantReadWriteData(this.getRecipeLambda);
+    this.recipesTable.grantReadWriteData(this.updateRecipeLambda);
+    this.recipesTable.grantReadWriteData(this.deleteRecipeLambda);
 
     this.api = new apigateway.RestApi(this, 'KochessApi', {
       restApiName: 'Kochess API',
@@ -74,9 +101,13 @@ export class BackendStack extends cdk.Stack {
     cdk.Tags.of(this.api).add('Name', 'kochess-api');
 
     const recipesResource = this.api.root.addResource('recipes');
+    const recipeByIdResource = recipesResource.addResource('{id}');
 
     recipesResource.addMethod('GET', new apigateway.LambdaIntegration(this.listRecipesLambda));
     recipesResource.addMethod('POST', new apigateway.LambdaIntegration(this.createRecipeLambda));
+    recipeByIdResource.addMethod('GET', new apigateway.LambdaIntegration(this.getRecipeLambda));
+    recipeByIdResource.addMethod('PUT', new apigateway.LambdaIntegration(this.updateRecipeLambda));
+    recipeByIdResource.addMethod('DELETE', new apigateway.LambdaIntegration(this.deleteRecipeLambda));
 
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: this.api.url,
@@ -101,6 +132,21 @@ export class BackendStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'CreateRecipeLambdaArn', {
       value: this.createRecipeLambda.functionArn,
       description: 'Create Recipe Lambda ARN',
+    });
+
+    new cdk.CfnOutput(this, 'GetRecipeLambdaArn', {
+      value: this.getRecipeLambda.functionArn,
+      description: 'Get Recipe Lambda ARN',
+    });
+
+    new cdk.CfnOutput(this, 'UpdateRecipeLambdaArn', {
+      value: this.updateRecipeLambda.functionArn,
+      description: 'Update Recipe Lambda ARN',
+    });
+
+    new cdk.CfnOutput(this, 'DeleteRecipeLambdaArn', {
+      value: this.deleteRecipeLambda.functionArn,
+      description: 'Delete Recipe Lambda ARN',
     });
   }
 }
