@@ -16,10 +16,10 @@ Project is a **monorepo**.
 - shadcn
 - Tailwind
 - Typescript
-- Serverless Functions (Lambda)
-- API Gateway
-- DynamoDb
-- S3
+- AWS Lambda Functions
+- AWS API Gateway
+- AWS DynamoDb
+- AWS S3
 - Open AI API
 - Clerk auth
 - Tanstack Router
