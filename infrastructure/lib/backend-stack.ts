@@ -3,8 +3,10 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as lambdaCore from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
 import * as path from 'path';
 import { Construct } from 'constructs';
+import { Config } from './config';
 
 export class BackendStack extends cdk.Stack {
   public readonly recipesTable: dynamodb.Table;
@@ -98,6 +100,20 @@ export class BackendStack extends cdk.Stack {
     });
     cdk.Tags.of(this.api).add('Name', 'kochess-api');
 
+    const certificateArn = Config.get('CERTIFICATE_ARN');
+    const apiDomainName = `api.${Config.get('DOMAIN_NAME')}`;
+
+    const certificate = certificatemanager.Certificate.fromCertificateArn(this, 'ApiCertificate', certificateArn);
+
+    const customDomain = new apigateway.DomainName(this, 'ApiDomainName', {
+      domainName: apiDomainName,
+      certificate: certificate,
+      endpointType: apigateway.EndpointType.EDGE,
+      securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
+    });
+
+    customDomain.addBasePathMapping(this.api);
+
     const recipesResource = this.api.root.addResource('recipes');
     const recipeByIdResource = recipesResource.addResource('{id}');
 
@@ -110,6 +126,16 @@ export class BackendStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: this.api.url,
       description: 'API Gateway URL',
+    });
+
+    new cdk.CfnOutput(this, 'CustomApiUrl', {
+      value: `https://${apiDomainName}`,
+      description: 'Custom Domain API URL',
+    });
+
+    new cdk.CfnOutput(this, 'ApiGatewayDomainTarget', {
+      value: customDomain.domainNameAliasDomainName,
+      description: 'CNAME target for API Gateway Domain',
     });
 
     new cdk.CfnOutput(this, 'RecipesTableName', {
