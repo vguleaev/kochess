@@ -9,6 +9,8 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = new cdk.App();
 
+cdk.Tags.of(app).add('Project', 'kochess');
+
 new FrontendStack(app, 'KochessFrontendStack', {
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
