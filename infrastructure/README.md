@@ -18,10 +18,6 @@ infrastructure/
 
 ---
 
-## ⚠️ AWS Account Setup
-
-**IMPORTANT**: Never use your AWS root account for CDK deployments.
-
 ### Quick Setup
 
 1. Create an IAM user with needed permissions
