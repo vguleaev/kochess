@@ -12,6 +12,8 @@
     "deploy:infra": "pnpm --filter infrastructure cdk deploy",
     "deploy:frontend": "pnpm --filter frontend build && pnpm --filter infrastructure cdk:deploy-frontend",
     "deploy:backend": "pnpm --filter backend build && pnpm --filter infrastructure cdk:deploy-backend",
+    "diff:frontend": "pnpm --filter frontend build && pnpm --filter infrastructure cdk:diff-frontend",
+    "diff:backend": "pnpm --filter backend build && pnpm --filter infrastructure cdk:diff-backend",
     "dev:frontend": "pnpm --filter frontend dev"
   },
   "devDependencies": {

@@ -10,6 +10,7 @@ import { Config } from './config';
 
 export class BackendStack extends cdk.Stack {
   public readonly recipesTable: dynamodb.Table;
+  public readonly authorizerLambda: lambda.NodejsFunction;
   public readonly listRecipesLambda: lambda.NodejsFunction;
   public readonly createRecipeLambda: lambda.NodejsFunction;
   public readonly getRecipeLambda: lambda.NodejsFunction;
@@ -47,6 +48,23 @@ export class BackendStack extends cdk.Stack {
         sourceMap: true,
       },
     };
+
+    this.authorizerLambda = new lambda.NodejsFunction(this, 'ClerkAuthorizerLambda', {
+      runtime: lambdaCore.Runtime.NODEJS_22_X,
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 256,
+      entry: path.join(__dirname, '../../backend/src/handlers/auth/authorizer.ts'),
+      handler: 'handler',
+      environment: {
+        CLERK_ISSUER: Config.get('CLERK_ISSUER'),
+        CLERK_JWKS_URL: Config.get('CLERK_JWKS_URL'),
+      },
+      bundling: {
+        minify: true,
+        sourceMap: true,
+      },
+    });
+    cdk.Tags.of(this.authorizerLambda).add('Name', 'kochess-clerk-authorizer');
 
     this.listRecipesLambda = new lambda.NodejsFunction(this, 'ListRecipesLambda', {
       ...lambdaProps,
@@ -114,14 +132,30 @@ export class BackendStack extends cdk.Stack {
 
     customDomain.addBasePathMapping(this.api);
 
+    const authorizer = new apigateway.TokenAuthorizer(this, 'ClerkAuthorizer', {
+      handler: this.authorizerLambda,
+      identitySource: 'method.request.header.Authorization',
+      resultsCacheTtl: cdk.Duration.minutes(5),
+    });
+
     const recipesResource = this.api.root.addResource('recipes');
     const recipeByIdResource = recipesResource.addResource('{id}');
 
-    recipesResource.addMethod('GET', new apigateway.LambdaIntegration(this.listRecipesLambda));
-    recipesResource.addMethod('POST', new apigateway.LambdaIntegration(this.createRecipeLambda));
-    recipeByIdResource.addMethod('GET', new apigateway.LambdaIntegration(this.getRecipeLambda));
-    recipeByIdResource.addMethod('PUT', new apigateway.LambdaIntegration(this.updateRecipeLambda));
-    recipeByIdResource.addMethod('DELETE', new apigateway.LambdaIntegration(this.deleteRecipeLambda));
+    recipesResource.addMethod('GET', new apigateway.LambdaIntegration(this.listRecipesLambda), {
+      authorizer,
+    });
+    recipesResource.addMethod('POST', new apigateway.LambdaIntegration(this.createRecipeLambda), {
+      authorizer,
+    });
+    recipeByIdResource.addMethod('GET', new apigateway.LambdaIntegration(this.getRecipeLambda), {
+      authorizer,
+    });
+    recipeByIdResource.addMethod('PUT', new apigateway.LambdaIntegration(this.updateRecipeLambda), {
+      authorizer,
+    });
+    recipeByIdResource.addMethod('DELETE', new apigateway.LambdaIntegration(this.deleteRecipeLambda), {
+      authorizer,
+    });
 
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: this.api.url,
@@ -171,6 +205,11 @@ export class BackendStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'DeleteRecipeLambdaArn', {
       value: this.deleteRecipeLambda.functionArn,
       description: 'Delete Recipe Lambda ARN',
+    });
+
+    new cdk.CfnOutput(this, 'AuthorizerLambdaArn', {
+      value: this.authorizerLambda.functionArn,
+      description: 'Clerk Authorizer Lambda ARN',
     });
   }
 }
