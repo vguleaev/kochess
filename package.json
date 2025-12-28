@@ -6,6 +6,7 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
+    "dev:frontend": "pnpm --filter frontend dev",
     "build:backend": "pnpm --filter backend build",
     "build:frontend": "pnpm --filter frontend build",
     "build:infra": "pnpm --filter infrastructure build",
@@ -13,8 +14,7 @@
     "deploy:frontend": "pnpm --filter frontend build && pnpm --filter infrastructure cdk:deploy-frontend",
     "deploy:backend": "pnpm --filter backend build && pnpm --filter infrastructure cdk:deploy-backend",
     "diff:frontend": "pnpm --filter frontend build && pnpm --filter infrastructure cdk:diff-frontend",
-    "diff:backend": "pnpm --filter backend build && pnpm --filter infrastructure cdk:diff-backend",
-    "dev:frontend": "pnpm --filter frontend dev"
+    "diff:backend": "pnpm --filter backend build && pnpm --filter infrastructure cdk:diff-backend"
   },
   "devDependencies": {
     "typescript": "^5.3.0",

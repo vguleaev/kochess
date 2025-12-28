@@ -1,7 +1,9 @@
 import { RouterProvider } from '@tanstack/react-router';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { useAuth, useUser } from '@clerk/clerk-react';
 
 import { router } from '@/lib/router';
+import { queryClient } from '@/lib/query-client';
 import { Spinner } from '@/components/ui/spinner';
 
 export function InnerApp() {
@@ -17,12 +19,14 @@ export function InnerApp() {
   }
 
   return (
-    <RouterProvider
-      router={router}
-      context={{
-        auth: { isLoaded, isSignedIn: isSignedIn ?? false, userId: userId ?? null },
-        user: user ?? null,
-      }}
-    />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider
+        router={router}
+        context={{
+          auth: { isLoaded, isSignedIn: isSignedIn ?? false, userId: userId ?? null },
+          user: user ?? null,
+        }}
+      />
+    </QueryClientProvider>
   );
 }
