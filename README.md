@@ -13,15 +13,15 @@ Project is a **monorepo**.
 - React
 - Vite
 - PWA
-- shadcn
+- shadcn UI
 - Tailwind
 - Typescript
 - AWS Lambda Functions
 - AWS API Gateway
 - AWS DynamoDb
 - AWS S3
+- AWS Cognito
 - Open AI API
-- Clerk auth
 - Tanstack Router
 - Tanstack Query
 - Zustand

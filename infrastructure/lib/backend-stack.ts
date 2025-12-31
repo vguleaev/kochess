@@ -4,6 +4,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as lambdaCore from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as path from 'path';
 import { Construct } from 'constructs';
 import { Config } from './config';
@@ -17,6 +18,8 @@ export class BackendStack extends cdk.Stack {
   public readonly updateRecipeLambda: lambda.NodejsFunction;
   public readonly deleteRecipeLambda: lambda.NodejsFunction;
   public readonly api: apigateway.RestApi;
+  public readonly userPool: cognito.UserPool;
+  public readonly userPoolClient: cognito.UserPoolClient;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -34,6 +37,51 @@ export class BackendStack extends cdk.Stack {
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
+    this.userPool = new cognito.UserPool(this, 'KochessUserPool', {
+      userPoolName: 'kochess-user-pool',
+      selfSignUpEnabled: true,
+      signInAliases: {
+        email: true,
+        username: false,
+      },
+      autoVerify: {
+        email: true,
+      },
+      standardAttributes: {
+        email: {
+          required: true,
+          mutable: true,
+        },
+        fullname: {
+          required: true,
+          mutable: true,
+        },
+      },
+      passwordPolicy: {
+        minLength: 8,
+        requireLowercase: true,
+        requireUppercase: true,
+        requireDigits: true,
+        requireSymbols: false,
+      },
+      accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
+      email: cognito.UserPoolEmail.withCognito(),
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+    cdk.Tags.of(this.userPool).add('Name', 'kochess-user-pool');
+
+    this.userPoolClient = new cognito.UserPoolClient(this, 'KochessUserPoolClient', {
+      userPool: this.userPool,
+      userPoolClientName: 'kochess-web-client',
+      authFlows: {
+        userPassword: true,
+        userSrp: true,
+      },
+      preventUserExistenceErrors: true,
+      generateSecret: false,
+    });
+    cdk.Tags.of(this.userPoolClient).add('Name', 'kochess-user-pool-client');
+
     const lambdaEnvironment = {
       RECIPES_TABLE_NAME: this.recipesTable.tableName,
     };
@@ -49,22 +97,22 @@ export class BackendStack extends cdk.Stack {
       },
     };
 
-    this.authorizerLambda = new lambda.NodejsFunction(this, 'ClerkAuthorizerLambda', {
+    this.authorizerLambda = new lambda.NodejsFunction(this, 'CognitoAuthorizerLambda', {
       runtime: lambdaCore.Runtime.NODEJS_22_X,
       timeout: cdk.Duration.seconds(30),
       memorySize: 256,
       entry: path.join(__dirname, '../../backend/src/handlers/auth/authorizer.ts'),
       handler: 'handler',
       environment: {
-        CLERK_ISSUER: Config.get('CLERK_ISSUER'),
-        CLERK_JWKS_URL: Config.get('CLERK_JWKS_URL'),
+        COGNITO_USER_POOL_ID: this.userPool.userPoolId,
+        COGNITO_REGION: cdk.Stack.of(this).region,
       },
       bundling: {
         minify: true,
         sourceMap: true,
       },
     });
-    cdk.Tags.of(this.authorizerLambda).add('Name', 'kochess-clerk-authorizer');
+    cdk.Tags.of(this.authorizerLambda).add('Name', 'kochess-cognito-authorizer');
 
     this.listRecipesLambda = new lambda.NodejsFunction(this, 'ListRecipesLambda', {
       ...lambdaProps,
@@ -132,7 +180,7 @@ export class BackendStack extends cdk.Stack {
 
     customDomain.addBasePathMapping(this.api);
 
-    const authorizer = new apigateway.TokenAuthorizer(this, 'ClerkAuthorizer', {
+    const authorizer = new apigateway.TokenAuthorizer(this, 'CognitoAuthorizer', {
       handler: this.authorizerLambda,
       identitySource: 'method.request.header.Authorization',
       resultsCacheTtl: cdk.Duration.minutes(5),
@@ -209,7 +257,19 @@ export class BackendStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'AuthorizerLambdaArn', {
       value: this.authorizerLambda.functionArn,
-      description: 'Clerk Authorizer Lambda ARN',
+      description: 'Cognito Authorizer Lambda ARN',
+    });
+
+    new cdk.CfnOutput(this, 'UserPoolId', {
+      value: this.userPool.userPoolId,
+      description: 'Cognito User Pool ID',
+      exportName: 'KochessUserPoolId',
+    });
+
+    new cdk.CfnOutput(this, 'UserPoolClientId', {
+      value: this.userPoolClient.userPoolClientId,
+      description: 'Cognito User Pool Client ID',
+      exportName: 'KochessUserPoolClientId',
     });
   }
 }

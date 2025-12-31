@@ -66,6 +66,7 @@ Thumbs.db
 *.iws
 *.sublime-project
 *.sublime-workspace
+.cursor/
 
 # AWS CDK
 cdk.out/

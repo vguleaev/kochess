@@ -2,17 +2,20 @@ import { APIGatewayTokenAuthorizerEvent, APIGatewayAuthorizerResult, Context } f
 import * as jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
-const CLERK_ISSUER = process.env.CLERK_ISSUER;
-const CLERK_JWKS_URL = process.env.CLERK_JWKS_URL;
+const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID;
+const COGNITO_REGION = process.env.COGNITO_REGION;
 
-if (!CLERK_ISSUER || !CLERK_JWKS_URL) {
-  throw new Error('Missing required Clerk configuration');
+if (!COGNITO_USER_POOL_ID || !COGNITO_REGION) {
+  throw new Error('Missing required Cognito configuration');
 }
+
+const COGNITO_ISSUER = `https://cognito-idp.${COGNITO_REGION}.amazonaws.com/${COGNITO_USER_POOL_ID}`;
+const COGNITO_JWKS_URL = `${COGNITO_ISSUER}/.well-known/jwks.json`;
 
 const client = jwksClient({
   cache: true,
   cacheMaxAge: 600000,
-  jwksUri: CLERK_JWKS_URL,
+  jwksUri: COGNITO_JWKS_URL,
 });
 
 const getSigningKey = (kid: string): Promise<string> => {
@@ -42,7 +45,7 @@ export const handler = async (
     const signingKey = await getSigningKey(decoded.header.kid);
 
     const verified = jwt.verify(token, signingKey, {
-      issuer: CLERK_ISSUER,
+      issuer: COGNITO_ISSUER,
       algorithms: ['RS256'],
     }) as jwt.JwtPayload;
 
