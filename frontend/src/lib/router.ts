@@ -1,7 +1,7 @@
 import { createRouter } from '@tanstack/react-router';
-import { useUser } from '@clerk/clerk-react';
 
 import { routeTree } from '@/routeTree.gen';
+import type { User } from '@/contexts/AuthContext';
 
 export type RouterContext = {
   auth: {
@@ -9,7 +9,7 @@ export type RouterContext = {
     isSignedIn: boolean;
     userId: string | null;
   };
-  user: ReturnType<typeof useUser>['user'];
+  user: User | null;
 };
 
 export const router = createRouter({

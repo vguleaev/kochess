@@ -1,16 +1,7 @@
 import type { Recipe, RecipeListResponse, CreateRecipeInput } from '@/types/recipe';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
-
-interface ClerkWindow extends Window {
-  Clerk?: {
-    session?: {
-      getToken: () => Promise<string | null>;
-    };
-  };
-}
-
-declare const window: ClerkWindow;
 
 class ApiError extends Error {
   statusCode: number;
@@ -25,7 +16,8 @@ class ApiError extends Error {
 }
 
 async function fetchWithAuth<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const token = await window.Clerk?.session?.getToken();
+  const session = await fetchAuthSession();
+  const token = session.tokens?.idToken?.toString();
 
   if (!token) {
     throw new ApiError('Not authenticated', 401);
