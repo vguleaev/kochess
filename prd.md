@@ -14,7 +14,8 @@ The application leverages modern web technologies to provide a seamless user exp
 - **Onboarding journey**: During registration users select age, height, weight, sex, and activity level to calculate their daily calorie intake.
 - **User profile**: User can view and edit their profile information, including personal details and dietary preferences.
 - **Search Functionality**: Users can search for recipes by ingredients, cuisine, or dietary restrictions.
-- **AI-Powered Recommendations**: Suggest recipes based on user preferences and recopies (AI feature).
+- **AI Recipe Recommendations**: Suggest recipes based on user preferences and recipes (AI feature).
+- **AI Calorie Counter**: User can upload a photo of a food item and AI will automatically calculate the calories. (AI feature)
 - **Mobile App Design**: App optimized for mobile devices.
 
 ## Recept Management details
@@ -27,6 +28,12 @@ Recipe has few fields:
 - Ingredients (optional, free text)
 
 Automatically extract with AI amount of calories (per 100 gram). Store it in the database (async way).
+
+## AI Calorie Counter details
+
+When user uploads a photo for a recepy AI will automatically calculate the calories and extract ingredients list. This is a toggle feature when user creates a recipe.
+
+One calories calculation from a photo costs 1 credit. User can buy credits in the app.
 
 ## Calorie Tracking
 

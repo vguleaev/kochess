@@ -1,3 +1,5 @@
+<img src="frontend/public/kochess-logo-filled.svg" alt="Logo" width="100" height="100">
+
 # Kochess
 
 **Kochess** - AI-powered collection of your favorite recipes.
