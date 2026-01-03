@@ -9,13 +9,6 @@ import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/contexts/AuthContext';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field';
 
-const Logo = () => (
-  <Link to="/" className="flex items-center justify-center gap-2 self-center font-medium">
-    <img src="/kochess-logo-filled.svg" alt="Kochess" className="h-12 w-12" />
-    <span className="text-xl font-bold">Kochess</span>
-  </Link>
-);
-
 const LoginForm = () => {
   const { loadUser } = useAuth();
   const navigate = useNavigate();

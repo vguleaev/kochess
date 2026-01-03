@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const currentUser: AuthUser = await getCurrentUser();
       const attributes = await fetchUserAttributes();
 
-      const name = attributes.fullname || '';
+      const name = attributes.name || '';
       const email = attributes.email || '';
 
       setUserId(currentUser.userId);
