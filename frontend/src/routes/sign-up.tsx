@@ -1,12 +1,14 @@
 import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
-import { useState } from 'react';
-import { signUp, confirmSignUp, getCurrentUser, autoSignIn } from '@aws-amplify/auth';
+import React, { useState } from 'react';
+import { signUp, confirmSignUp, autoSignIn } from '@aws-amplify/auth';
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/contexts/AuthContext';
+import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -145,185 +147,177 @@ const SignUpPage = () => {
     }
   };
 
-  if (step === 'verification') {
+  const renderLogo = () => {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Verify Your Email</CardTitle>
-            <CardDescription>We've sent a verification code to {email}. Please enter it below.</CardDescription>
-          </CardHeader>
-          <form onSubmit={handleConfirmSignUp}>
-            <CardContent className="space-y-4">
-              {error && (
-                <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-                  {error}
-                </div>
-              )}
-              <div className="space-y-2">
-                <label htmlFor="verificationCode" className="text-sm font-medium">
-                  Verification Code
-                </label>
-                <Input
-                  id="verificationCode"
-                  type="text"
-                  placeholder="000000"
-                  value={verificationCode}
-                  onChange={(e) => {
-                    setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6));
-                    setVerificationCodeError(null);
-                    setError(null);
-                  }}
-                  aria-invalid={!!verificationCodeError}
-                  disabled={isLoading}
-                  autoComplete="one-time-code"
-                  maxLength={6}
-                  className="text-center text-2xl tracking-widest"
-                />
-                {verificationCodeError && <p className="text-sm text-destructive">{verificationCodeError}</p>}
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col gap-4">
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Spinner className="mr-2" />
-                    Verifying...
-                  </>
-                ) : (
-                  'Verify Email'
-                )}
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full"
-                onClick={() => setStep('signup')}
-                disabled={isLoading}>
-                Back to Sign Up
-              </Button>
-            </CardFooter>
-          </form>
-        </Card>
-      </div>
+      <Link to="/" className="flex items-center justify-center gap-2 self-center font-medium">
+        <img src="/kochess-logo-filled.svg" alt="Kochess" className="h-12 w-12" />
+        <span className="text-xl font-bold">Kochess</span>
+      </Link>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Sign Up</CardTitle>
-          <CardDescription>Create an account to get started</CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSignUp}>
-          <CardContent className="space-y-4">
-            {error && (
-              <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-                {error}
-              </div>
-            )}
-            <div className="space-y-2">
-              <label htmlFor="fullName" className="text-sm font-medium">
-                Full Name
-              </label>
-              <Input
-                id="fullName"
-                type="text"
-                placeholder="John Doe"
-                value={fullName}
-                onChange={(e) => {
-                  setFullName(e.target.value);
-                  setFullNameError(null);
-                  setError(null);
-                }}
-                aria-invalid={!!fullNameError}
-                disabled={isLoading}
-                autoComplete="name"
-              />
-              {fullNameError && <p className="text-sm text-destructive">{fullNameError}</p>}
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setEmailError(null);
-                  setError(null);
-                }}
-                aria-invalid={!!emailError}
-                disabled={isLoading}
-                autoComplete="email"
-              />
-              {emailError && <p className="text-sm text-destructive">{emailError}</p>}
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError(null);
-                  setError(null);
-                }}
-                aria-invalid={!!passwordError}
-                disabled={isLoading}
-                autoComplete="new-password"
-              />
-              {passwordError && <p className="text-sm text-destructive">{passwordError}</p>}
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="confirmPassword" className="text-sm font-medium">
-                Confirm Password
-              </label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  setConfirmPasswordError(null);
-                  setError(null);
-                }}
-                aria-invalid={!!confirmPasswordError}
-                disabled={isLoading}
-                autoComplete="new-password"
-              />
-              {confirmPasswordError && <p className="text-sm text-destructive">{confirmPasswordError}</p>}
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Spinner className="mr-2" />
-                  Creating account...
-                </>
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col gap-6">
+          {renderLogo()}
+          <Card className="shadow-none ring-0">
+            <CardHeader>
+              <CardTitle>{step === 'verification' ? 'Verify Your Email' : 'Sign Up'}</CardTitle>
+              <CardDescription>
+                {step === 'verification'
+                  ? `We've sent a verification code to ${email}. Please enter it below.`
+                  : 'Create an account to get started'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {step === 'verification' ? (
+                <form onSubmit={handleConfirmSignUp}>
+                  {error && (
+                    <div className="mb-4 p-3 rounded-md bg-destructive/10 text-destructive text-sm">{error}</div>
+                  )}
+                  <FieldGroup>
+                    <Field>
+                      <FieldLabel htmlFor="verificationCode">Verification Code</FieldLabel>
+                      <div className="flex justify-center py-2">
+                        <InputOTP
+                          maxLength={6}
+                          value={verificationCode}
+                          onChange={(value) => {
+                            setVerificationCode(value);
+                            setVerificationCodeError(null);
+                            setError(null);
+                          }}
+                          disabled={isLoading}>
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                          </InputOTPGroup>
+                          <InputOTPSeparator />
+                          <InputOTPGroup>
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </div>
+                      {verificationCodeError && <p className="text-sm text-destructive">{verificationCodeError}</p>}
+                    </Field>
+                    <Field>
+                      <Button type="submit" disabled={isLoading}>
+                        {isLoading ? <Spinner className="mr-2 h-4 w-4" /> : null}
+                        Verify Email
+                      </Button>
+                      <Button type="button" variant="ghost" onClick={() => setStep('signup')} disabled={isLoading}>
+                        Back to Sign Up
+                      </Button>
+                    </Field>
+                  </FieldGroup>
+                </form>
               ) : (
-                'Sign Up'
+                <form onSubmit={handleSignUp}>
+                  {error && (
+                    <div className="mb-4 p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+                      {error}
+                    </div>
+                  )}
+                  <FieldGroup>
+                    <Field>
+                      <FieldLabel htmlFor="fullName">Full Name</FieldLabel>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        placeholder="John Doe"
+                        value={fullName}
+                        onChange={(e) => {
+                          setFullName(e.target.value);
+                          setFullNameError(null);
+                          setError(null);
+                        }}
+                        aria-invalid={!!fullNameError}
+                        disabled={isLoading}
+                        autoComplete="name"
+                        required
+                      />
+                      {fullNameError && <p className="text-sm text-destructive">{fullNameError}</p>}
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="email">Email</FieldLabel>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setEmailError(null);
+                          setError(null);
+                        }}
+                        aria-invalid={!!emailError}
+                        disabled={isLoading}
+                        autoComplete="email"
+                        required
+                      />
+                      {emailError && <p className="text-sm text-destructive">{emailError}</p>}
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="password">Password</FieldLabel>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          setPasswordError(null);
+                          setError(null);
+                        }}
+                        aria-invalid={!!passwordError}
+                        disabled={isLoading}
+                        autoComplete="new-password"
+                        required
+                      />
+                      {passwordError && <p className="text-sm text-destructive">{passwordError}</p>}
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        placeholder="••••••••"
+                        value={confirmPassword}
+                        onChange={(e) => {
+                          setConfirmPassword(e.target.value);
+                          setConfirmPasswordError(null);
+                          setError(null);
+                        }}
+                        aria-invalid={!!confirmPasswordError}
+                        disabled={isLoading}
+                        autoComplete="new-password"
+                        required
+                      />
+                      {confirmPasswordError && <p className="text-sm text-destructive">{confirmPasswordError}</p>}
+                    </Field>
+                    <Field>
+                      <Button type="submit" disabled={isLoading}>
+                        {isLoading ? <Spinner className="mr-2 h-4 w-4" /> : null}
+                        Sign Up
+                      </Button>
+                      <FieldDescription className="text-center">
+                        Already have an account?{' '}
+                        <Link to="/sign-in" className="underline underline-offset-4">
+                          Sign in
+                        </Link>
+                      </FieldDescription>
+                    </Field>
+                  </FieldGroup>
+                </form>
               )}
-            </Button>
-            <div className="text-center text-sm text-muted-foreground">
-              Already have an account?{' '}
-              <Link to="/sign-in" className="text-primary hover:underline underline-offset-4">
-                Sign in
-              </Link>
-            </div>
-          </CardFooter>
-        </form>
-      </Card>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };

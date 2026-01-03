@@ -10,7 +10,7 @@ function About() {
   return (
     <div className="p-2">
       <p>Hello from About!</p>
-      {user && <p>Logged in as: {user.emailAddresses[0].emailAddress}</p>}
+      {user && <p>Logged in as: {user.email}</p>}
     </div>
   );
 }

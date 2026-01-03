@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Hub } from 'aws-amplify/utils';
 import { getCurrentUser, fetchUserAttributes, type AuthUser } from 'aws-amplify/auth';
 
 export interface AuthContextType {
