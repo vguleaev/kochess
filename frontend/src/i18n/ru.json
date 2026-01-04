@@ -1,0 +1,21 @@
+{
+  "profile": {
+    "title": "Профиль",
+    "name": "Имя",
+    "email": "Эл.почта",
+    "darkTheme": "Тёмная тема",
+    "language": "Язык",
+    "logout": "Выйти",
+    "noName": "Нет имени",
+    "noEmail": "Нет эл. почты",
+    "languages": {
+      "en": "Английский",
+      "ru": "Русский"
+    }
+  },
+  "navigation": {
+    "home": "Главная",
+    "nutrition": "Диетология",
+    "profile": "Профиль"
+  }
+}

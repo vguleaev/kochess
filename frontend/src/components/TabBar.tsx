@@ -1,9 +1,11 @@
 import { Link, useLocation } from '@tanstack/react-router';
 import { Home, Utensils, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export const TabBar = () => {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
 
   const isActive = (path: string) => {
     if (path === '/' && pathname === '/') return true;
@@ -21,7 +23,7 @@ export const TabBar = () => {
             isActive('/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
           )}>
           <Home className="h-6 w-6" />
-          <span className="text-[10px] font-medium">Home</span>
+          <span className="text-[10px] font-medium">{t('navigation.home')}</span>
         </Link>
 
         <Link
@@ -31,7 +33,7 @@ export const TabBar = () => {
             isActive('/nutrition') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
           )}>
           <Utensils className="h-6 w-6" />
-          <span className="text-[10px] font-medium">Nutrition</span>
+          <span className="text-[10px] font-medium">{t('navigation.nutrition')}</span>
         </Link>
 
         <Link
@@ -41,7 +43,7 @@ export const TabBar = () => {
             isActive('/profile') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
           )}>
           <User className="h-6 w-6" />
-          <span className="text-[10px] font-medium">Profile</span>
+          <span className="text-[10px] font-medium">{t('navigation.profile')}</span>
         </Link>
       </div>
     </div>

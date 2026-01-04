@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
 import { useTheme } from '@/contexts/theme-provider';
+import { useTranslation } from 'react-i18next';
 
 export const Route = createFileRoute('/_authenticated/profile')({
   component: ProfilePage,
@@ -15,6 +16,7 @@ function ProfilePage() {
   const { user, loadUser } = useAuth();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { t, i18n } = useTranslation();
 
   const handleSignOut = async () => {
     try {
@@ -39,11 +41,15 @@ function ProfilePage() {
 
   const initials = user ? getInitials(user.name, user.email) : 'U';
 
+  const changeLanguage = (value: string) => {
+    i18n.changeLanguage(value);
+  };
+
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
+    <div className="container mx-auto p-4 md:p-6 lg:p-8">
       <div className="max-w-md mx-auto space-y-8">
         <div className="flex items-center justify-center relative">
-          <h1 className="text-xl font-semibold">Profile</h1>
+          <h1 className="text-xl font-semibold">{t('profile.title')}</h1>
         </div>
 
         <div className="flex flex-col items-center gap-4">
@@ -57,35 +63,35 @@ function ProfilePage() {
         <div className="space-y-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between py-2 border-b">
-              <span className="font-medium">Name</span>
+              <span className="font-medium">{t('profile.name')}</span>
               <div className="flex items-center text-muted-foreground">
-                <span className="mr-2">{user?.name || 'No Name'}</span>
+                <span className="mr-2">{user?.name || t('profile.noName')}</span>
               </div>
             </div>
 
             <div className="flex items-center justify-between py-2 border-b">
-              <span className="font-medium">Email</span>
+              <span className="font-medium">{t('profile.email')}</span>
               <div className="flex items-center text-muted-foreground">
-                <span className="mr-2">{user?.email || 'No Email'}</span>
+                <span className="mr-2">{user?.email || t('profile.noEmail')}</span>
               </div>
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="flex items-center justify-between py-2 border-b">
-              <span className="font-medium">Dark Theme</span>
+              <span className="font-medium">{t('profile.darkTheme')}</span>
               <Switch checked={theme === 'dark'} onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} />
             </div>
 
             <div className="flex items-center justify-between py-2">
-              <span className="font-medium">Language</span>
-              <Select defaultValue="en">
+              <span className="font-medium">{t('profile.language')}</span>
+              <Select value={i18n.language} onValueChange={changeLanguage}>
                 <SelectTrigger className="w-[130px] text-muted-foreground">
-                  <SelectValue placeholder="Language" />
+                  <SelectValue placeholder={t('profile.language')} />
                 </SelectTrigger>
                 <SelectContent align="end">
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="ru">Russian</SelectItem>
+                  <SelectItem value="en">{t('profile.languages.en')}</SelectItem>
+                  <SelectItem value="ru">{t('profile.languages.ru')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -95,7 +101,7 @@ function ProfilePage() {
         <div className="pt-8">
           <Button variant="destructive" className="w-full h-12 rounded-xl text-base gap-2" onClick={handleSignOut}>
             <LogOut className="h-5 w-5" />
-            Log Out
+            {t('profile.logout')}
           </Button>
         </div>
       </div>

@@ -3,7 +3,7 @@
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/inter';
 
-html {
+/* html {
   font-size: 18px;
 }
 
@@ -11,7 +11,7 @@ html {
   html {
     font-size: 16px;
   }
-}
+} */
 
 @custom-variant dark (&:is(.dark *));
 

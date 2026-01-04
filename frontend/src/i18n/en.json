@@ -1,0 +1,21 @@
+{
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "darkTheme": "Dark Theme",
+    "language": "Language",
+    "logout": "Log Out",
+    "noName": "No Name",
+    "noEmail": "No Email",
+    "languages": {
+      "en": "English",
+      "ru": "Russian"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "nutrition": "Nutrition",
+    "profile": "Profile"
+  }
+}
