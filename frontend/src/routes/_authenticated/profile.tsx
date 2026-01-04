@@ -5,6 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
+import { useTheme } from '@/contexts/theme-provider';
 
 export const Route = createFileRoute('/_authenticated/profile')({
   component: ProfilePage,
@@ -13,6 +14,7 @@ export const Route = createFileRoute('/_authenticated/profile')({
 function ProfilePage() {
   const { user, loadUser } = useAuth();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   const handleSignOut = async () => {
     try {
@@ -54,14 +56,14 @@ function ProfilePage() {
 
         <div className="space-y-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b border-border">
+            <div className="flex items-center justify-between py-2 border-b">
               <span className="font-medium">Name</span>
               <div className="flex items-center text-muted-foreground">
                 <span className="mr-2">{user?.name || 'No Name'}</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between py-2 border-b border-border">
+            <div className="flex items-center justify-between py-2 border-b">
               <span className="font-medium">Email</span>
               <div className="flex items-center text-muted-foreground">
                 <span className="mr-2">{user?.email || 'No Email'}</span>
@@ -70,15 +72,15 @@ function ProfilePage() {
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b border-border">
+            <div className="flex items-center justify-between py-2 border-b">
               <span className="font-medium">Dark Theme</span>
-              <Switch />
+              <Switch checked={theme === 'dark'} onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} />
             </div>
 
-            <div className="flex items-center justify-between py-2 border-b border-border">
+            <div className="flex items-center justify-between py-2">
               <span className="font-medium">Language</span>
               <Select defaultValue="en">
-                <SelectTrigger className="w-[100px] h-8 border-none shadow-none bg-transparent hover:bg-transparent focus:ring-0 px-0 flex justify-end gap-1 text-muted-foreground">
+                <SelectTrigger className="w-[130px] text-muted-foreground">
                   <SelectValue placeholder="Language" />
                 </SelectTrigger>
                 <SelectContent align="end">

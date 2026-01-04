@@ -19,6 +19,7 @@ export const pwaConfig: Partial<VitePWAOptions> = {
     ],
   },
   workbox: {
+    cleanupOutdatedCaches: true,
     globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
     runtimeCaching: [
       {
