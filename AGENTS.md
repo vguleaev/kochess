@@ -1,0 +1,3 @@
+- Always use shadcn ui components
+- Always use tailwind css
+- Always use pnpm to install dependencies
