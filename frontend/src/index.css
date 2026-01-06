@@ -3,16 +3,6 @@
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/inter';
 
-/* html {
-  font-size: 18px;
-}
-
-@media (min-width: 640px) {
-  html {
-    font-size: 16px;
-  }
-} */
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
