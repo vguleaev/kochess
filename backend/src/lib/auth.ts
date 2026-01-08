@@ -14,7 +14,7 @@ export const getUserId = (event: APIGatewayProxyEvent): string => {
 export const requireAuth = (event: APIGatewayProxyEvent): string => {
   try {
     return getUserId(event);
-  } catch (error) {
+  } catch {
     throw unauthorized('Authentication required');
   }
 };

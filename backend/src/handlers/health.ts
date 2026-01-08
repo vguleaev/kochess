@@ -1,7 +1,6 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { success } from '../lib/api-response';
 
-export const handler = async (event: APIGatewayProxyEvent, context: Context) => {
+export const handler = async () => {
   return success({
     status: 'healthy',
     timestamp: new Date().toISOString(),

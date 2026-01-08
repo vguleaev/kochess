@@ -11,12 +11,15 @@ import { Config } from './config';
 
 export class BackendStack extends cdk.Stack {
   public readonly recipesTable: dynamodb.Table;
+  public readonly userProfilesTable: dynamodb.Table;
   public readonly authorizerLambda: lambda.NodejsFunction;
   public readonly listRecipesLambda: lambda.NodejsFunction;
   public readonly createRecipeLambda: lambda.NodejsFunction;
   public readonly getRecipeLambda: lambda.NodejsFunction;
   public readonly updateRecipeLambda: lambda.NodejsFunction;
   public readonly deleteRecipeLambda: lambda.NodejsFunction;
+  public readonly getProfileLambda: lambda.NodejsFunction;
+  public readonly updateProfileLambda: lambda.NodejsFunction;
   public readonly api: apigateway.RestApi;
   public readonly userPool: cognito.UserPool;
   public readonly userPoolClient: cognito.UserPoolClient;
@@ -36,6 +39,13 @@ export class BackendStack extends cdk.Stack {
       partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
     });
+
+    this.userProfilesTable = new dynamodb.Table(this, 'UserProfilesTable', {
+      partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+    cdk.Tags.of(this.userProfilesTable).add('Name', 'kochess-user-profiles-table');
 
     this.userPool = new cognito.UserPool(this, 'KochessUserPool', {
       userPoolName: 'kochess-user-pool',
@@ -84,6 +94,7 @@ export class BackendStack extends cdk.Stack {
 
     const lambdaEnvironment = {
       RECIPES_TABLE_NAME: this.recipesTable.tableName,
+      USER_PROFILES_TABLE_NAME: this.userProfilesTable.tableName,
     };
 
     const lambdaProps: lambda.NodejsFunctionProps = {
@@ -149,11 +160,28 @@ export class BackendStack extends cdk.Stack {
     });
     cdk.Tags.of(this.deleteRecipeLambda).add('Name', 'kochess-delete-recipe');
 
+    this.getProfileLambda = new lambda.NodejsFunction(this, 'GetProfileLambda', {
+      ...lambdaProps,
+      entry: path.join(__dirname, '../../backend/src/handlers/users/profile.ts'),
+      handler: 'getHandler',
+    });
+    cdk.Tags.of(this.getProfileLambda).add('Name', 'kochess-get-profile');
+
+    this.updateProfileLambda = new lambda.NodejsFunction(this, 'UpdateProfileLambda', {
+      ...lambdaProps,
+      entry: path.join(__dirname, '../../backend/src/handlers/users/profile.ts'),
+      handler: 'updateHandler',
+    });
+    cdk.Tags.of(this.updateProfileLambda).add('Name', 'kochess-update-profile');
+
     this.recipesTable.grantReadData(this.listRecipesLambda);
     this.recipesTable.grantReadWriteData(this.createRecipeLambda);
     this.recipesTable.grantReadWriteData(this.getRecipeLambda);
     this.recipesTable.grantReadWriteData(this.updateRecipeLambda);
     this.recipesTable.grantReadWriteData(this.deleteRecipeLambda);
+
+    this.userProfilesTable.grantReadData(this.getProfileLambda);
+    this.userProfilesTable.grantReadWriteData(this.updateProfileLambda);
 
     this.api = new apigateway.RestApi(this, 'KochessApi', {
       restApiName: 'Kochess API',
@@ -202,6 +230,15 @@ export class BackendStack extends cdk.Stack {
       authorizer,
     });
     recipeByIdResource.addMethod('DELETE', new apigateway.LambdaIntegration(this.deleteRecipeLambda), {
+      authorizer,
+    });
+
+    const profileResource = this.api.root.addResource('profile');
+
+    profileResource.addMethod('GET', new apigateway.LambdaIntegration(this.getProfileLambda), {
+      authorizer,
+    });
+    profileResource.addMethod('PUT', new apigateway.LambdaIntegration(this.updateProfileLambda), {
       authorizer,
     });
 
@@ -270,6 +307,16 @@ export class BackendStack extends cdk.Stack {
       value: this.userPoolClient.userPoolClientId,
       description: 'Cognito User Pool Client ID',
       exportName: 'KochessUserPoolClientId',
+    });
+
+    new cdk.CfnOutput(this, 'UserProfilesTableName', {
+      value: this.userProfilesTable.tableName,
+      description: 'DynamoDB User Profiles Table Name',
+    });
+
+    new cdk.CfnOutput(this, 'UserProfilesTableArn', {
+      value: this.userProfilesTable.tableArn,
+      description: 'DynamoDB User Profiles Table ARN',
     });
   }
 }

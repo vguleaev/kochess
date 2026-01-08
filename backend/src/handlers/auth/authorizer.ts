@@ -1,4 +1,4 @@
-import { APIGatewayTokenAuthorizerEvent, APIGatewayAuthorizerResult, Context } from 'aws-lambda';
+import { APIGatewayTokenAuthorizerEvent, APIGatewayAuthorizerResult } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
@@ -30,10 +30,7 @@ const getSigningKey = (kid: string): Promise<string> => {
   });
 };
 
-export const handler = async (
-  event: APIGatewayTokenAuthorizerEvent,
-  context: Context
-): Promise<APIGatewayAuthorizerResult> => {
+export const handler = async (event: APIGatewayTokenAuthorizerEvent): Promise<APIGatewayAuthorizerResult> => {
   try {
     const token = event.authorizationToken.replace('Bearer ', '');
 

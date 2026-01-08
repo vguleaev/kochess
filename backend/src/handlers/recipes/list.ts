@@ -1,10 +1,10 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { dynamoClient, getTableName } from '../../lib/dynamodb';
 import { requireAuth } from '../../lib/auth';
 import { success, error } from '../../lib/api-response';
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 
-export const handler = async (event: APIGatewayProxyEvent, context: Context) => {
+export const handler = async (event: APIGatewayProxyEvent) => {
   try {
     const userId = requireAuth(event);
 

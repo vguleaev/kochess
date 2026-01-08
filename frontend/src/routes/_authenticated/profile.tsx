@@ -80,7 +80,10 @@ function ProfilePage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between py-2 border-b">
               <span className="font-medium">{t('profile.darkTheme')}</span>
-              <Switch checked={theme === 'dark'} onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} />
+              <Switch
+                checked={theme === 'dark'}
+                onCheckedChange={(checked: boolean) => setTheme(checked ? 'dark' : 'light')}
+              />
             </div>
 
             <div className="flex items-center justify-between py-2">

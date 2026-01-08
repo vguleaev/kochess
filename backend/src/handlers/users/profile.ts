@@ -1,11 +1,12 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
+import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { UserProfile } from '@kochess/shared/types';
 import { dynamoClient, getTableName } from '../../lib/dynamodb';
 import { requireAuth } from '../../lib/auth';
 import { success, badRequest, error } from '../../lib/api-response';
-import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
-import { UserProfile } from '../../types';
+import { calculateDailyCalories } from '../../helpers/calories-calculator';
 
-export const getHandler = async (event: APIGatewayProxyEvent, context: Context) => {
+export const getHandler = async (event: APIGatewayProxyEvent) => {
   try {
     const userId = requireAuth(event);
 
@@ -18,12 +19,13 @@ export const getHandler = async (event: APIGatewayProxyEvent, context: Context) 
 
     if (!result.Item) {
       return success({
-        userId,
-        message: 'Profile not found',
+        profile: null,
       });
     }
 
-    return success(result.Item);
+    return success({
+      profile: result.Item,
+    });
   } catch (err) {
     console.error('Error getting profile:', err);
     if (err instanceof Error && err.message.includes('Authentication')) {
@@ -33,7 +35,7 @@ export const getHandler = async (event: APIGatewayProxyEvent, context: Context) 
   }
 };
 
-export const updateHandler = async (event: APIGatewayProxyEvent, context: Context) => {
+export const updateHandler = async (event: APIGatewayProxyEvent) => {
   try {
     const userId = requireAuth(event);
 
@@ -42,7 +44,11 @@ export const updateHandler = async (event: APIGatewayProxyEvent, context: Contex
     }
 
     const updates = JSON.parse(event.body);
-    const { age, height, weight, activityLevel } = updates;
+    const { age, heightCm, weightKg, gender, activityLevel, goal } = updates;
+
+    if (!age || !heightCm || !weightKg || !gender || !activityLevel || !goal) {
+      return badRequest('All fields are required: age, heightCm, weightKg, gender, activityLevel, goal');
+    }
 
     const existing = await dynamoClient.send(
       new GetCommand({
@@ -51,14 +57,18 @@ export const updateHandler = async (event: APIGatewayProxyEvent, context: Contex
       })
     );
 
+    const dailyCalorieIntake = calculateDailyCalories(Number(age), Number(heightCm), Number(weightKg), gender, activityLevel);
+
     const now = new Date().toISOString();
     const profile: UserProfile = {
       userId,
-      age: age !== undefined ? Number(age) : existing?.Item?.age,
-      height: height !== undefined ? Number(height) : existing?.Item?.height,
-      weight: weight !== undefined ? Number(weight) : existing?.Item?.weight,
-      activityLevel: activityLevel || existing?.Item?.activityLevel,
-      dailyCalorieIntake: existing?.Item?.dailyCalorieIntake,
+      age,
+      gender,
+      heightCm,
+      weightKg,
+      activityLevel,
+      goal,
+      dailyCalorieIntake,
       createdAt: existing?.Item?.createdAt || now,
       updatedAt: now,
     };
@@ -70,7 +80,9 @@ export const updateHandler = async (event: APIGatewayProxyEvent, context: Contex
       })
     );
 
-    return success(profile);
+    return success({
+      profile,
+    });
   } catch (err) {
     console.error('Error updating profile:', err);
     if (err instanceof Error && err.message.includes('Authentication')) {
@@ -79,3 +91,4 @@ export const updateHandler = async (event: APIGatewayProxyEvent, context: Contex
     return error('Failed to update profile', 500);
   }
 };
+

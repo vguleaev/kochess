@@ -1,11 +1,11 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { requireAuth } from '../../lib/auth';
 import { success, badRequest, error } from '../../lib/api-response';
 import { createOpenAIClient } from '../../lib/openai';
 
-export const handler = async (event: APIGatewayProxyEvent, context: Context) => {
+export const handler = async (event: APIGatewayProxyEvent) => {
   try {
-    const userId = requireAuth(event);
+    requireAuth(event);
 
     if (!event.body) {
       return badRequest('Request body is required');

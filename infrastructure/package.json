@@ -8,6 +8,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
+    "lint": "eslint .",
     "cdk": "cdk",
     "cdk:deploy-frontend": "pnpm build && pnpm cdk deploy KochessFrontendStack --profile kochess",
     "cdk:diff-frontend": "pnpm build && pnpm cdk diff KochessFrontendStack --profile kochess",
@@ -15,17 +16,21 @@
     "cdk:diff-backend": "pnpm build && pnpm cdk diff KochessBackendStack --profile kochess"
   },
   "devDependencies": {
+    "@eslint/js": "9.39.1",
     "@types/jest": "^29.5.14",
     "@types/node": "22.7.9",
     "aws-cdk": "2.1031.2",
-    "dotenv": "^17.2.3",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.6.3"
+    "dotenv": "17.2.3",
+    "eslint": "9.39.1",
+    "globals": "16.5.0",
+    "jest": "29.7.0",
+    "ts-jest": "29.4.5",
+    "ts-node": "10.9.2",
+    "typescript": "5.6.3",
+    "typescript-eslint": "8.46.3"
   },
   "dependencies": {
     "aws-cdk-lib": "2.215.0",
-    "constructs": "^10.0.0"
+    "constructs": "10.4.3"
   }
 }

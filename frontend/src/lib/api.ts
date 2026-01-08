@@ -1,4 +1,9 @@
 import type { Recipe, RecipeListResponse, CreateRecipeInput } from '@/types/recipe';
+import type {
+  ProfileResponse,
+  UpsertProfileRequest,
+  UpsertProfileResponse,
+} from '@kochess/shared/types';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -45,31 +50,44 @@ async function fetchWithAuth<T>(endpoint: string, options: RequestInit = {}): Pr
 }
 
 export const recipeApi = {
-  list: async (): Promise<RecipeListResponse> => {
+  list: async () => {
     return fetchWithAuth<RecipeListResponse>('/recipes');
   },
 
-  create: async (input: CreateRecipeInput): Promise<Recipe> => {
+  create: async (input: CreateRecipeInput) => {
     return fetchWithAuth<Recipe>('/recipes', {
       method: 'POST',
       body: JSON.stringify(input),
     });
   },
 
-  get: async (id: string): Promise<Recipe> => {
+  get: async (id: string) => {
     return fetchWithAuth<Recipe>(`/recipes/${id}`);
   },
 
-  update: async (id: string, input: Partial<CreateRecipeInput>): Promise<Recipe> => {
+  update: async (id: string, input: Partial<CreateRecipeInput>) => {
     return fetchWithAuth<Recipe>(`/recipes/${id}`, {
       method: 'PUT',
       body: JSON.stringify(input),
     });
   },
 
-  delete: async (id: string): Promise<void> => {
+  delete: async (id: string) => {
     return fetchWithAuth<void>(`/recipes/${id}`, {
       method: 'DELETE',
+    });
+  },
+};
+
+export const profileApi = {
+  get: async () => {
+    return fetchWithAuth<ProfileResponse>('/profile');
+  },
+
+  upsert: async (input: UpsertProfileRequest) => {
+    return fetchWithAuth<UpsertProfileResponse>('/profile', {
+      method: 'PUT',
+      body: JSON.stringify(input),
     });
   },
 };
