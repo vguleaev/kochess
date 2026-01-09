@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "test": "vitest run",
     "watch": "tsc -w",
     "lint": "eslint .",
     "clean": "rm -rf dist"
@@ -26,6 +27,7 @@
     "eslint": "9.39.1",
     "globals": "16.5.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.46.3"
+    "typescript-eslint": "8.46.3",
+    "vitest": "4.0.16"
   }
 }
