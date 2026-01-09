@@ -51,7 +51,8 @@ export const handler = async (event: APIGatewayTokenAuthorizerEvent): Promise<AP
       throw new Error('User ID not found in token');
     }
 
-    return generatePolicy(userId, 'Allow', event.methodArn, { userId });
+    const policyResource = event.methodArn.split('/').slice(0, 2).join('/') + '/*';
+    return generatePolicy(userId, 'Allow', policyResource, { userId });
   } catch (error) {
     console.error('Authorization failed:', error);
     throw new Error('Unauthorized');

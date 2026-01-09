@@ -1,13 +1,16 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getCurrentUser, fetchUserAttributes, type AuthUser } from 'aws-amplify/auth';
+import { profileApi } from '@/lib/api';
 
 export interface AuthContextType {
   isLoaded: boolean;
   isSignedIn: boolean;
+  hasProfile: boolean;
   userId: string | null;
   user: User | null;
   loadUser: () => Promise<void>;
+  loadProfile: () => Promise<void>;
 }
 
 export interface User {
@@ -21,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [hasProfile, setHasProfile] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
@@ -43,17 +47,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUserId(null);
       setIsSignedIn(false);
       setUser(null);
-    } finally {
-      setIsLoaded(true);
     }
   };
 
+  const loadProfile = async () => {
+    try {
+      const { profile } = await profileApi.get();
+      setHasProfile(!!profile);
+    } catch (error) {
+      console.error('Failed to fetch profile:', error);
+      setHasProfile(false);
+    }
+  };
+
+  const loadUserData = async () => {
+    await loadUser();
+    await loadProfile();
+    setIsLoaded(true);
+  };
+
   useEffect(() => {
-    loadUser();
+    loadUserData();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoaded, isSignedIn, userId, user, loadUser }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ isLoaded, isSignedIn, hasProfile, userId, user, loadUser, loadProfile }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 
@@ -65,8 +85,10 @@ export function useAuth() {
   return {
     isLoaded: context.isLoaded,
     isSignedIn: context.isSignedIn,
+    hasProfile: context.hasProfile,
     userId: context.userId,
     user: context.user,
     loadUser: context.loadUser,
+    loadProfile: context.loadProfile,
   };
 }

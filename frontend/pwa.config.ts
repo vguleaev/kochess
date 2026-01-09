@@ -20,19 +20,8 @@ export const pwaConfig: Partial<VitePWAOptions> = {
   },
   workbox: {
     cleanupOutdatedCaches: true,
+    clientsClaim: true,
+    skipWaiting: true,
     globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/api\./i,
-        handler: 'NetworkFirst',
-        options: {
-          cacheName: 'api-cache',
-          expiration: {
-            maxEntries: 50,
-            maxAgeSeconds: 60 * 60,
-          },
-        },
-      },
-    ],
   },
 };

@@ -7,7 +7,7 @@ import { queryClient } from '@/lib/query-client';
 import { Spinner } from '@/components/ui/spinner';
 
 export function InnerApp() {
-  const { isLoaded, isSignedIn, userId, user } = useAuth();
+  const { isLoaded, isSignedIn, hasProfile, userId, user } = useAuth();
 
   if (!isLoaded) {
     return (
@@ -22,7 +22,7 @@ export function InnerApp() {
       <RouterProvider
         router={router}
         context={{
-          auth: { isLoaded, isSignedIn, userId },
+          auth: { isLoaded, isSignedIn, hasProfile, userId },
           user: user,
         }}
       />

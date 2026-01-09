@@ -16,6 +16,12 @@ export const Route = createFileRoute('/_authenticated')({
         },
       });
     }
+
+    if (!context.auth.hasProfile) {
+      throw redirect({
+        to: '/onboarding',
+      });
+    }
   },
   component: () => {
     return (

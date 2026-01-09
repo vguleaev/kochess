@@ -7,6 +7,7 @@ export type RouterContext = {
   auth: {
     isLoaded: boolean;
     isSignedIn: boolean;
+    hasProfile: boolean;
     userId: string | null;
   };
   user: User | null;
@@ -18,6 +19,7 @@ export const router = createRouter({
     auth: {
       isLoaded: false,
       isSignedIn: false,
+      hasProfile: false,
       userId: null,
     },
     user: null,
