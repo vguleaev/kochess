@@ -1,4 +1,7 @@
 {
+  "onboarding": {
+    "continue": "Продолжить"
+  },
   "profile": {
     "title": "Профиль",
     "name": "Имя",
@@ -17,5 +20,40 @@
     "home": "Главная",
     "nutrition": "Диетология",
     "profile": "Профиль"
+  },
+  "nutrition": {
+    "title": "Диетология",
+    "dailyCalorieTarget": "Ваша цель калорий",
+    "dailyCalorieTargetDescription": "На основе ваших настроек профиля",
+    "kcal": "ккал",
+    "dailyCalorieCalculationExplanation": "Ваша цель калорий рассчитывается с помощью уравнения Мифлин-Ст Джор на основе вашего возраста, пола, роста, веса и уровня активности.",
+    "age": "Возраст",
+    "gender": "Пол",
+    "height": "Рост (см)",
+    "weight": "Вес (кг)",
+    "genderOptions": {
+      "MALE": "Мужской",
+      "FEMALE": "Женский"
+    },
+    "selectGender": "Выберите пол",
+    "activityLevel": "Уровень активности",
+    "activityLevelOptions": {
+      "SEDENTARY": "Неподвижный",
+      "LIGHT": "Низкий",
+      "MODERATE": "Средний",
+      "ACTIVE": "Высокий",
+      "VERY_ACTIVE": "Очень высокий"
+    },
+    "goal": "Цель",
+    "goalOptions": {
+      "MAINTAIN": "Поддерживать",
+      "LOSE": "Сбросить вес",
+      "GAIN": "Набирать вес"
+    },
+    "proteinsPct": "Белки",
+    "fatsPct": "Жиры",
+    "carbsPct": "Углеводы",
+    "grammShort": "г",
+    "saveProfile": "Сохранить профиль"
   }
 }

@@ -1,4 +1,7 @@
 {
+  "onboarding": {
+    "continue": "Continue"
+  },
   "profile": {
     "title": "Profile",
     "name": "Name",
@@ -17,5 +20,40 @@
     "home": "Home",
     "nutrition": "Nutrition",
     "profile": "Profile"
+  },
+  "nutrition": {
+    "title": "Nutrition",
+    "dailyCalorieTarget": "Daily Calorie Target",
+    "dailyCalorieTargetDescription": "Based on your profile settings",
+    "kcal": "kcal",
+    "dailyCalorieCalculationExplanation": "Your daily calorie target is calculated using the Mifflin-St Jeor equation based on your age, gender, height, weight, and activity level.",
+    "age": "Age",
+    "gender": "Gender",
+    "height": "Height (cm)",
+    "weight": "Weight (kg)",
+    "genderOptions": {
+      "MALE": "Male",
+      "FEMALE": "Female"
+    },
+    "selectGender": "Select gender",
+    "activityLevel": "Activity Level",
+    "activityLevelOptions": {
+      "SEDENTARY": "Sedentary",
+      "LIGHT": "Light",
+      "MODERATE": "Moderate",
+      "ACTIVE": "Active",
+      "VERY_ACTIVE": "Very Active"
+    },
+    "goal": "Goal",
+    "goalOptions": {
+      "MAINTAIN": "Maintain",
+      "LOSE": "Lose",
+      "GAIN": "Gain"
+    },
+    "proteinsPct": "Proteins",
+    "fatsPct": "Fats",
+    "carbsPct": "Carbs",
+    "grammShort": "g",
+    "saveProfile": "Save Profile"
   }
 }

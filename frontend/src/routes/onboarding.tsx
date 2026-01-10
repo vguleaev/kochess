@@ -2,7 +2,10 @@ import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProfileForm } from '@/components/profile/ProfileForm';
 
+import { useTranslation } from 'react-i18next';
+
 const OnboardingPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { loadProfile } = useAuth();
 
@@ -18,7 +21,7 @@ const OnboardingPage = () => {
           onSuccess={handleSuccess}
           title="Finish your profile"
           description="We just need a few details to complete your profile."
-          submitLabel="Continue"
+          submitLabel={t('onboarding.continue')}
         />
       </div>
     </div>
