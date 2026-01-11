@@ -57,7 +57,14 @@ export const updateHandler = async (event: APIGatewayProxyEvent) => {
       })
     );
 
-    const dailyCalorieIntake = calculateDailyCalories(Number(age), Number(heightCm), Number(weightKg), gender, activityLevel);
+    const dailyCalorieIntake = calculateDailyCalories(
+      Number(age),
+      Number(heightCm),
+      Number(weightKg),
+      gender,
+      activityLevel,
+      goal
+    );
 
     const now = new Date().toISOString();
     const profile: UserProfile = {

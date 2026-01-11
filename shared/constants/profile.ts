@@ -1,5 +1,3 @@
-import type { ActivityLevel, Goal } from '../types/profile';
-
 export const GENDER = {
   MALE: 'male',
   FEMALE: 'female',
@@ -18,19 +16,6 @@ export const GOAL = {
   MAINTAIN: 'maintain',
   GAIN: 'gain',
 } as const;
-
-export const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
-  [ACTIVITY_LEVEL.SEDENTARY]: 1.2,
-  [ACTIVITY_LEVEL.LIGHT]: 1.375,
-  [ACTIVITY_LEVEL.MODERATE]: 1.55,
-  [ACTIVITY_LEVEL.ACTIVE]: 1.725,
-  [ACTIVITY_LEVEL.VERY_ACTIVE]: 1.9,
-};
-export const GOAL_CALORIE_ADJUSTMENTS: Record<Goal, number> = {
-  [GOAL.LOSE]: -500,
-  [GOAL.MAINTAIN]: 0,
-  [GOAL.GAIN]: 500,
-};
 
 // Validations
 export const AGE_MIN = 13;

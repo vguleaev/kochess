@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculateDailyCalories } from './calories-calculator';
-import { ACTIVITY_LEVEL, GENDER } from '@kochess/shared/constants';
+import { ACTIVITY_LEVEL, GENDER, GOAL } from '@kochess/shared/constants';
 
 describe('calculateDailyCalories', () => {
   const testInput = {
@@ -16,7 +16,8 @@ describe('calculateDailyCalories', () => {
       testInput.height,
       testInput.weight,
       testInput.sex,
-      ACTIVITY_LEVEL.SEDENTARY
+      ACTIVITY_LEVEL.SEDENTARY,
+      GOAL.MAINTAIN
     );
     expect(result).toBe(1950);
   });
@@ -27,7 +28,8 @@ describe('calculateDailyCalories', () => {
       testInput.height,
       testInput.weight,
       testInput.sex,
-      ACTIVITY_LEVEL.LIGHT
+      ACTIVITY_LEVEL.LIGHT,
+      GOAL.MAINTAIN
     );
     expect(result).toBe(2234);
   });
@@ -38,7 +40,8 @@ describe('calculateDailyCalories', () => {
       testInput.height,
       testInput.weight,
       testInput.sex,
-      ACTIVITY_LEVEL.MODERATE
+      ACTIVITY_LEVEL.MODERATE,
+      GOAL.MAINTAIN
     );
     expect(result).toBe(2519);
   });
@@ -49,7 +52,8 @@ describe('calculateDailyCalories', () => {
       testInput.height,
       testInput.weight,
       testInput.sex,
-      ACTIVITY_LEVEL.ACTIVE
+      ACTIVITY_LEVEL.ACTIVE,
+      GOAL.MAINTAIN
     );
     expect(result).toBe(2803);
   });
@@ -60,8 +64,33 @@ describe('calculateDailyCalories', () => {
       testInput.height,
       testInput.weight,
       testInput.sex,
-      ACTIVITY_LEVEL.VERY_ACTIVE
+      ACTIVITY_LEVEL.VERY_ACTIVE,
+      GOAL.MAINTAIN
     );
     expect(result).toBe(3088);
+  });
+
+  it('reduces calories by 20% for LOSE goal', () => {
+    const result = calculateDailyCalories(
+      testInput.age,
+      testInput.height,
+      testInput.weight,
+      testInput.sex,
+      ACTIVITY_LEVEL.SEDENTARY,
+      GOAL.LOSE
+    );
+    expect(result).toBe(1560);
+  });
+
+  it('increases calories by 20% for GAIN goal', () => {
+    const result = calculateDailyCalories(
+      testInput.age,
+      testInput.height,
+      testInput.weight,
+      testInput.sex,
+      ACTIVITY_LEVEL.SEDENTARY,
+      GOAL.GAIN
+    );
+    expect(result).toBe(2340);
   });
 });
