@@ -4,9 +4,10 @@ import { signOut } from 'aws-amplify/auth';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
+import { LogOut, Monitor, Globe } from 'lucide-react';
 import { useTheme } from '@/contexts/theme-provider';
 import { useTranslation } from 'react-i18next';
+import { Card } from '@/components/ui/card';
 
 export const Route = createFileRoute('/_authenticated/profile')({
   component: ProfilePage,
@@ -46,68 +47,60 @@ function ProfilePage() {
   };
 
   return (
-    <div className="container mx-auto p-4 md:p-6 lg:p-8">
-      <div className="max-w-md mx-auto space-y-8">
-        <div className="flex items-center justify-center relative">
-          <h1 className="text-xl font-semibold">{t('profile.title')}</h1>
-        </div>
+    <div className="container max-w-md mx-auto p-4 space-y-6">
+      <h1 className="text-xl font-semibold text-center mb-6">{t('profile.title')}</h1>
 
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-24 w-24 rounded-full bg-muted flex items-center justify-center text-3xl font-medium text-muted-foreground overflow-hidden relative">
-            <div className="bg-primary text-primary-foreground w-full h-full flex items-center justify-center text-primary">
-              {initials}
-            </div>
+      <Card className="shadow-none bg-gradient-to-br from-primary/25 via-background to-background">
+        <div className="flex flex-col items-center justify-center p-8 py-10 text-center relative">
+          <div className="h-24 w-24 rounded-full bg-[#fdc700] flex items-center justify-center text-4xl font-bold text-white mb-4">
+            {initials}
+          </div>
+          <div className="space-y-1 relative z-10">
+            <h2 className="text-2xl font-bold text-foreground tracking-tight">{user?.name || t('profile.noName')}</h2>
+            <p className="text-muted-foreground font-medium">{user?.email || t('profile.noEmail')}</p>
           </div>
         </div>
+      </Card>
 
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b">
-              <span className="font-medium">{t('profile.name')}</span>
-              <div className="flex items-center text-muted-foreground">
-                <span className="mr-2">{user?.name || t('profile.noName')}</span>
-              </div>
-            </div>
+      <Card className="p-6 shadow-none">
+        <h3 className="font-semibold text-lg">{t('profile.settings')}</h3>
 
-            <div className="flex items-center justify-between py-2 border-b">
-              <span className="font-medium">{t('profile.email')}</span>
-              <div className="flex items-center text-muted-foreground">
-                <span className="mr-2">{user?.email || t('profile.noEmail')}</span>
-              </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-1">
+            <div className="px-2 bg-muted rounded-full">
+              <Monitor className="h-4 w-4 text-foreground" />
             </div>
+            <span className="font-medium">{t('profile.darkTheme')}</span>
           </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b">
-              <span className="font-medium">{t('profile.darkTheme')}</span>
-              <Switch
-                checked={theme === 'dark'}
-                onCheckedChange={(checked: boolean) => setTheme(checked ? 'dark' : 'light')}
-              />
-            </div>
-
-            <div className="flex items-center justify-between py-2">
-              <span className="font-medium">{t('profile.language')}</span>
-              <Select value={i18n.language} onValueChange={changeLanguage}>
-                <SelectTrigger className="w-[130px] text-muted-foreground">
-                  <SelectValue placeholder={t('profile.language')} />
-                </SelectTrigger>
-                <SelectContent align="end">
-                  <SelectItem value="en">{t('profile.languages.en')}</SelectItem>
-                  <SelectItem value="ru">{t('profile.languages.ru')}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <Switch
+            checked={theme === 'dark'}
+            onCheckedChange={(checked: boolean) => setTheme(checked ? 'dark' : 'light')}
+          />
         </div>
 
-        <div className="pt-8">
-          <Button variant="destructive" className="w-full h-12 rounded-xl text-base gap-2" onClick={handleSignOut}>
-            <LogOut className="h-5 w-5" />
-            {t('profile.logout')}
-          </Button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-1">
+            <div className="px-2 bg-muted rounded-full">
+              <Globe className="h-4 w-4 text-foreground" />
+            </div>
+            <span className="font-medium">{t('profile.language')}</span>
+          </div>
+          <Select value={i18n.language} onValueChange={changeLanguage}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder={t('profile.language')} />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectItem value="en">{t('profile.languages.en')}</SelectItem>
+              <SelectItem value="ru">{t('profile.languages.ru')}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </div>
+      </Card>
+
+      <Button variant="destructive" className="w-full h-12 text-base gap-2" onClick={handleSignOut}>
+        <LogOut className="h-5 w-5" />
+        {t('profile.logout')}
+      </Button>
     </div>
   );
 }
