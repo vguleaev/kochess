@@ -17,6 +17,10 @@
       "ru": "Russian"
     }
   },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
   "navigation": {
     "home": "Home",
     "nutrition": "Nutrition",
@@ -26,6 +30,8 @@
     "title": "Nutrition",
     "dailyCalorieTarget": "Daily Calorie Target",
     "dailyCalorieTargetDescription": "Based on your profile settings",
+    "editProfile": "Edit Profile",
+    "editProfileDesc": "Update your data and goal",
     "kcal": "kcal",
     "dailyCalorieCalculationExplanation": "Your daily calorie target is calculated using the Mifflin-St Jeor equation based on your age, gender, height, weight, and activity level.",
     "age": "Age",

@@ -19,7 +19,7 @@ const OnboardingPage = () => {
       <div className="w-full max-w-lg">
         <ProfileForm
           onSuccess={handleSuccess}
-          title="Finish your profile"
+          title="Finish account setup"
           description="We just need a few details to complete your profile."
           submitLabel={t('onboarding.continue')}
         />

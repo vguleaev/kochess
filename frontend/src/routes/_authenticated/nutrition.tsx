@@ -2,11 +2,14 @@ import { createFileRoute } from '@tanstack/react-router';
 import { profileApi } from '@/lib/api';
 import { ProfileForm } from '@/components/profile/ProfileForm';
 import { Spinner } from '@/components/ui/spinner';
-import { Flame } from 'lucide-react';
+import { Flame, Pencil } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { calculateMacros } from '@/lib/nutrition';
+import { useState } from 'react';
+import { ResponsiveDialog } from '@/components/ui/responsive-dialog';
+import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/_authenticated/nutrition')({
   component: NutritionPage,
@@ -15,6 +18,8 @@ export const Route = createFileRoute('/_authenticated/nutrition')({
 function NutritionPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     data: profile,
@@ -54,7 +59,7 @@ function NutritionPage() {
         <h1 className="text-xl font-semibold">{t('nutrition.title')}</h1>
       </div>
 
-      <div className="grid mt-6 gap-0 md:grid-cols-[1fr,400px]">
+      <div className="mt-6 gap-0">
         <div className="space-y-6">
           <Card className="bg-gradient-to-br from-primary/25 via-background to-background gap-2">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -113,15 +118,36 @@ function NutritionPage() {
           <div className="p-4 bg-muted/50 rounded-lg text-sm text-muted-foreground">
             <p>{t('nutrition.dailyCalorieCalculationExplanation')}</p>
           </div>
-        </div>
 
-        <div className="pt-4">
-          <ProfileForm
-            initialData={profile}
-            onSuccess={() => queryClient.invalidateQueries({ queryKey: ['profile'] })}
-            submitLabel={t('nutrition.saveProfile')}
-            variant="clean"
-          />
+          <ResponsiveDialog
+            open={isEditOpen}
+            onOpenChange={setIsEditOpen}
+            trigger={
+              <Button className="w-full gap-2" size="lg">
+                <Pencil className="h-4 w-4" />
+                {t('nutrition.editProfile')}
+              </Button>
+            }
+            title={t('nutrition.editProfileDesc')}
+            footer={
+              <Button form="nutrition-form" type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? <Spinner className="mr-2 h-4 w-4" /> : null}
+                {t('common.save')}
+              </Button>
+            }>
+            <ProfileForm
+              id="nutrition-form"
+              hideSubmit
+              initialData={profile}
+              className="pb-4"
+              onLoadingChange={setIsSubmitting}
+              onSuccess={async () => {
+                await queryClient.invalidateQueries({ queryKey: ['profile'] });
+                setIsEditOpen(false);
+              }}
+              variant="clean"
+            />
+          </ResponsiveDialog>
         </div>
       </div>
     </div>

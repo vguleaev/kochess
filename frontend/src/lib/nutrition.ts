@@ -2,7 +2,7 @@ import { GOAL } from '@kochess/shared/constants';
 import type { Goal } from '@kochess/shared/types';
 
 const PROTEIN_PER_KG_FOR_GOAL = {
-  [GOAL.LOSE]: 1.6,
+  [GOAL.LOSE]: 1.4,
   [GOAL.MAINTAIN]: 2.0,
   [GOAL.GAIN]: 2.2,
 }
