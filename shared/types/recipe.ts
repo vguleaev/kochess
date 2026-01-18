@@ -15,7 +15,7 @@ export interface RecipeListResponse {
   count: number;
 }
 
-export interface CreateRecipeInput {
+export interface CreateRecipeRequest {
   title: string;
   photo?: string;
   description?: string;

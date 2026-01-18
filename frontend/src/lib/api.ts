@@ -1,4 +1,4 @@
-import type { Recipe, RecipeListResponse, CreateRecipeInput } from '@/types/recipe';
+import type { Recipe, RecipeListResponse, CreateRecipeRequest } from '@kochess/shared/types';
 import type {
   ProfileResponse,
   UpsertProfileRequest,
@@ -54,7 +54,7 @@ export const recipeApi = {
     return fetchWithAuth<RecipeListResponse>('/recipes');
   },
 
-  create: async (input: CreateRecipeInput) => {
+  create: async (input: CreateRecipeRequest) => {
     return fetchWithAuth<Recipe>('/recipes', {
       method: 'POST',
       body: JSON.stringify(input),
@@ -65,7 +65,7 @@ export const recipeApi = {
     return fetchWithAuth<Recipe>(`/recipes/${id}`);
   },
 
-  update: async (id: string, input: Partial<CreateRecipeInput>) => {
+  update: async (id: string, input: Partial<CreateRecipeRequest>) => {
     return fetchWithAuth<Recipe>(`/recipes/${id}`, {
       method: 'PUT',
       body: JSON.stringify(input),
