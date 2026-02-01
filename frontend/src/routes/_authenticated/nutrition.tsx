@@ -1,6 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { profileApi } from '@/lib/api';
-import { ProfileForm } from '@/components/profile/ProfileForm';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { profileSchema, type ProfileFormValues } from '@/schemas/profile';
+import { ProfileFormFields } from '@/components/profile/ProfileFormFields';
 import { Spinner } from '@/components/ui/spinner';
 import { Flame, Pencil } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -19,7 +22,6 @@ function NutritionPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     data: profile,
@@ -32,6 +34,31 @@ function NutritionPage() {
       return profile;
     },
   });
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    values: profile
+      ? {
+          age: profile.age,
+          gender: profile.gender.toLowerCase() as ProfileFormValues['gender'], // Cast for enum match if needed
+          heightCm: profile.heightCm,
+          weightKg: profile.weightKg,
+          activityLevel: profile.activityLevel.toLowerCase() as ProfileFormValues['activityLevel'],
+          goal: profile.goal.toLowerCase() as ProfileFormValues['goal'],
+        }
+      : undefined,
+  });
+
+  const onSubmit = async (data: ProfileFormValues) => {
+    try {
+      await profileApi.upsert(data);
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
+      setIsEditOpen(false);
+    } catch (err) {
+      console.error(err);
+      // Handle error
+    }
+  };
 
   if (isLoading) {
     return (
@@ -130,23 +157,20 @@ function NutritionPage() {
             }
             title={t('nutrition.editProfileDesc')}
             footer={
-              <Button form="nutrition-form" type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? <Spinner className="mr-2 h-4 w-4" /> : null}
+              <Button
+                form="nutrition-form"
+                type="submit"
+                className="w-full mt-2 md:mt-0"
+                disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? <Spinner className="mr-2 h-4 w-4" /> : null}
                 {t('common.save')}
               </Button>
             }>
-            <ProfileForm
-              id="nutrition-form"
-              hideSubmit
-              initialData={profile}
-              className="pb-4"
-              onLoadingChange={setIsSubmitting}
-              onSuccess={async () => {
-                await queryClient.invalidateQueries({ queryKey: ['profile'] });
-                setIsEditOpen(false);
-              }}
-              variant="clean"
-            />
+            <FormProvider {...form}>
+              <form id="nutrition-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pb-4">
+                <ProfileFormFields />
+              </form>
+            </FormProvider>
           </ResponsiveDialog>
         </div>
       </div>

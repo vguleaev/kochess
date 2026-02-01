@@ -21,6 +21,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import { useTranslation } from 'react-i18next';
 
 interface ResponsiveDialogProps {
   children: React.ReactNode;
@@ -42,6 +43,7 @@ export function ResponsiveDialog({
   footer,
 }: ResponsiveDialogProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const { t } = useTranslation();
 
   if (isDesktop) {
     return (
@@ -71,7 +73,7 @@ export function ResponsiveDialog({
         <DrawerFooter className="pt-2">
           {footer}
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t('common.cancel')}</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

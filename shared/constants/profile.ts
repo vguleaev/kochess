@@ -17,7 +17,6 @@ export const GOAL = {
   GAIN: 'gain',
 } as const;
 
-// Validations
 export const AGE_MIN = 13;
 export const AGE_MAX = 120;
 
