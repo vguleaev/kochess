@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { router } from '@/lib/router';
 import { queryClient } from '@/lib/query-client';
 import { Spinner } from '@/components/ui/spinner';
+import { Toaster } from '@/components/ui/sonner';
 
 export function InnerApp() {
   const { isLoaded, isSignedIn, hasProfile, userId, user } = useAuth();
@@ -26,6 +27,7 @@ export function InnerApp() {
           user: user,
         }}
       />
+      <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
 }

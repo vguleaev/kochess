@@ -13,6 +13,7 @@ import { calculateMacros } from '@/lib/nutrition';
 import { useState } from 'react';
 import { ResponsiveDialog } from '@/components/ui/responsive-dialog';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/_authenticated/nutrition')({
   component: NutritionPage,
@@ -56,7 +57,7 @@ function NutritionPage() {
       setIsEditOpen(false);
     } catch (err) {
       console.error(err);
-      // Handle error
+      toast.error('Failed to update profile');
     }
   };
 
