@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth-context';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { profileSchema, type ProfileFormValues } from '@/schemas/profile';

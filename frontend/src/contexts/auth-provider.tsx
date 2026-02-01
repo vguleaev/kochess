@@ -1,25 +1,7 @@
-import type { ReactNode } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { getCurrentUser, fetchUserAttributes, type AuthUser } from 'aws-amplify/auth';
 import { profileApi } from '@/lib/api';
-
-export interface AuthContextType {
-  isLoaded: boolean;
-  isSignedIn: boolean;
-  hasProfile: boolean;
-  userId: string | null;
-  user: User | null;
-  loadUser: () => Promise<void>;
-  loadProfile: () => Promise<void>;
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext, type User } from './auth-context';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -75,20 +57,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return {
-    isLoaded: context.isLoaded,
-    isSignedIn: context.isSignedIn,
-    hasProfile: context.hasProfile,
-    userId: context.userId,
-    user: context.user,
-    loadUser: context.loadUser,
-    loadProfile: context.loadProfile,
-  };
 }

@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth-context';
 import { signOut } from 'aws-amplify/auth';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LogOut, Monitor, Globe } from 'lucide-react';
-import { useTheme } from '@/contexts/theme-provider';
+import { useTheme } from '@/contexts/theme-context';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import '@/lib/amplify-config';
 import './i18n/i18n';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/auth-provider';
 import { ThemeProvider } from './contexts/theme-provider';
 import { InnerApp } from './components/InnerApp';
 
@@ -18,6 +18,6 @@ if (!rootElement.innerHTML) {
           <InnerApp />
         </AuthProvider>
       </ThemeProvider>
-    </StrictMode>
+    </StrictMode>,
   );
 }
