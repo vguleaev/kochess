@@ -8,13 +8,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { profileApi } from '@/lib/api';
-
+import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
 const OnboardingPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { loadProfile } = useAuth();
+  const { checkProfile } = useAuth();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -31,11 +31,11 @@ const OnboardingPage = () => {
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       await profileApi.upsert(data);
-      await loadProfile();
+      await checkProfile();
       navigate({ to: '/' });
     } catch (error) {
       console.error('Failed to create profile:', error);
-      // Ideally show error toast or message here
+      toast.error('Failed to update profile');
     }
   };
 

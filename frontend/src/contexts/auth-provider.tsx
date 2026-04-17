@@ -25,14 +25,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name,
         email,
       });
+      await checkProfile();
     } catch {
       setUserId(null);
       setIsSignedIn(false);
       setUser(null);
+      setHasProfile(false);
     }
   };
 
-  const loadProfile = async () => {
+  const checkProfile = async () => {
     try {
       const { profile } = await profileApi.get();
       setHasProfile(!!profile);
@@ -44,7 +46,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadUserData = async () => {
     await loadUser();
-    await loadProfile();
     setIsLoaded(true);
   };
 
@@ -53,7 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoaded, isSignedIn, hasProfile, userId, user, loadUser, loadProfile }}>
+    <AuthContext.Provider
+      value={{ isLoaded, isSignedIn, hasProfile, userId, user, loadUser, checkProfile }}>
       {children}
     </AuthContext.Provider>
   );

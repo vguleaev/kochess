@@ -13,7 +13,7 @@ export interface AuthContextType {
   userId: string | null;
   user: User | null;
   loadUser: () => Promise<void>;
-  loadProfile: () => Promise<void>;
+  checkProfile: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,6 +30,6 @@ export function useAuth() {
     userId: context.userId,
     user: context.user,
     loadUser: context.loadUser,
-    loadProfile: context.loadProfile,
+    checkProfile: context.checkProfile,
   };
 }
