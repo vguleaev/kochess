@@ -62,5 +62,11 @@
     "carbsPct": "Carbs",
     "grammShort": "g",
     "saveProfile": "Save Profile"
+  },
+  "recipe": {
+    "title": "Recipes",
+    "add": "Add Recipe",
+    "edit": "Edit Recipe",
+    "delete": "Delete Recipe"
   }
 }
