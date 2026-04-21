@@ -16,7 +16,9 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedNutritionRouteImport } from './routes/_authenticated/nutrition'
+import { Route as AuthenticatedCreateRecipeRouteImport } from './routes/_authenticated/create-recipe'
 import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated/about'
+import { Route as AuthenticatedEditRecipeRecipeIdRouteImport } from './routes/_authenticated/edit-recipe.$recipeId'
 
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
@@ -52,29 +54,45 @@ const AuthenticatedNutritionRoute = AuthenticatedNutritionRouteImport.update({
   path: '/nutrition',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCreateRecipeRoute =
+  AuthenticatedCreateRecipeRouteImport.update({
+    id: '/create-recipe',
+    path: '/create-recipe',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAboutRoute = AuthenticatedAboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedEditRecipeRecipeIdRoute =
+  AuthenticatedEditRecipeRecipeIdRouteImport.update({
+    id: '/edit-recipe/$recipeId',
+    path: '/edit-recipe/$recipeId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/about': typeof AuthenticatedAboutRoute
+  '/create-recipe': typeof AuthenticatedCreateRecipeRoute
   '/nutrition': typeof AuthenticatedNutritionRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/': typeof AuthenticatedIndexRoute
+  '/edit-recipe/$recipeId': typeof AuthenticatedEditRecipeRecipeIdRoute
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/about': typeof AuthenticatedAboutRoute
+  '/create-recipe': typeof AuthenticatedCreateRecipeRoute
   '/nutrition': typeof AuthenticatedNutritionRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/': typeof AuthenticatedIndexRoute
+  '/edit-recipe/$recipeId': typeof AuthenticatedEditRecipeRecipeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -83,9 +101,11 @@ export interface FileRoutesById {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/_authenticated/about': typeof AuthenticatedAboutRoute
+  '/_authenticated/create-recipe': typeof AuthenticatedCreateRecipeRoute
   '/_authenticated/nutrition': typeof AuthenticatedNutritionRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/edit-recipe/$recipeId': typeof AuthenticatedEditRecipeRecipeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -94,18 +114,22 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/about'
+    | '/create-recipe'
     | '/nutrition'
     | '/profile'
     | '/'
+    | '/edit-recipe/$recipeId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/onboarding'
     | '/sign-in'
     | '/sign-up'
     | '/about'
+    | '/create-recipe'
     | '/nutrition'
     | '/profile'
     | '/'
+    | '/edit-recipe/$recipeId'
   id:
     | '__root__'
     | '/_authenticated'
@@ -113,9 +137,11 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/_authenticated/about'
+    | '/_authenticated/create-recipe'
     | '/_authenticated/nutrition'
     | '/_authenticated/profile'
     | '/_authenticated/'
+    | '/_authenticated/edit-recipe/$recipeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -176,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNutritionRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/create-recipe': {
+      id: '/_authenticated/create-recipe'
+      path: '/create-recipe'
+      fullPath: '/create-recipe'
+      preLoaderRoute: typeof AuthenticatedCreateRecipeRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/about': {
       id: '/_authenticated/about'
       path: '/about'
@@ -183,21 +216,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAboutRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/edit-recipe/$recipeId': {
+      id: '/_authenticated/edit-recipe/$recipeId'
+      path: '/edit-recipe/$recipeId'
+      fullPath: '/edit-recipe/$recipeId'
+      preLoaderRoute: typeof AuthenticatedEditRecipeRecipeIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
+  AuthenticatedCreateRecipeRoute: typeof AuthenticatedCreateRecipeRoute
   AuthenticatedNutritionRoute: typeof AuthenticatedNutritionRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedEditRecipeRecipeIdRoute: typeof AuthenticatedEditRecipeRecipeIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAboutRoute: AuthenticatedAboutRoute,
+  AuthenticatedCreateRecipeRoute: AuthenticatedCreateRecipeRoute,
   AuthenticatedNutritionRoute: AuthenticatedNutritionRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedEditRecipeRecipeIdRoute: AuthenticatedEditRecipeRecipeIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

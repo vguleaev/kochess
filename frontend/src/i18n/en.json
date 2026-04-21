@@ -2,6 +2,12 @@
   "onboarding": {
     "continue": "Continue"
   },
+  "home": {
+    "welcome": "Welcome{{name}}!",
+    "description": "Manage your recipes and meal plans",
+    "addRecipe": "Add Recipe",
+    "searchRecipes": "Search Recipes..."
+  },
   "profile": {
     "title": "Profile",
     "name": "Name",
@@ -19,7 +25,10 @@
   },
   "common": {
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "back": "Back",
+    "saving": "Saving..."
   },
   "navigation": {
     "home": "Home",
@@ -64,9 +73,20 @@
     "saveProfile": "Save Profile"
   },
   "recipe": {
-    "title": "Recipes",
+    "title": "Title",
+    "titlePlaceholder": "Caesar Salad",
+    "photo": "Photo",
+    "photoHelp": "Take a photo or upload an image",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe how to make it...",
+    "ingredients": "Ingredients",
+    "ingredientsPlaceholder": "List ingredients here...",
     "add": "Add Recipe",
     "edit": "Edit Recipe",
-    "delete": "Delete Recipe"
+    "save": "Save Recipe",
+    "update": "Update Recipe",
+    "delete": "Delete Recipe",
+    "deleteConfirmDescription": "This action cannot be undone. This will permanently delete your recipe.",
+    "deleteConfirmTitle": "Delete Recipe?"
   }
 }
